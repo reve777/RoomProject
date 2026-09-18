@@ -2,16 +2,12 @@ package com.booking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * 系統主程式入口 (JDK 25 / Spring Boot 3)
+ * 系統主程式入口 (JDK 25 運行環境 / Spring Boot 3)
  */
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.booking")
-@EntityScan(basePackages = "com.booking")
 @EnableAsync
 public class HotelBookingApplication {
 
@@ -24,7 +20,6 @@ public class HotelBookingApplication {
         System.out.println(" 資料庫: Oracle Database Docker (ivan/1234) ");
         System.out.println("=================================================");
 
-        System.setProperty("spring.classformat.ignore", "true");
         SpringApplication.run(HotelBookingApplication.class, args);
     }
 }

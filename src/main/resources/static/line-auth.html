@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE 登入授權確認 - Grand Luxury Hotel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background-color: #06c755;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        .line-logo {
+            width: 64px;
+            height: 64px;
+            background: #06c755;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        .btn-line-confirm {
+            background-color: #06c755;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+        .btn-line-confirm:hover {
+            background-color: #05a847;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card" id="authBox">
+        <div class="line-logo">💬</div>
+        <h2 style="color: #1e293b; margin-bottom: 8px; font-size: 1.4rem;">LINE 帳號授權登入</h2>
+        <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
+            <strong>Grand Luxury Resort &amp; Hotel</strong> 請求透過您的 LINE 身分完成快速登入
+        </p>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 20px;">
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="font-size: 0.85rem; color: #475569;">LINE 暱稱 / 貴賓姓名</label>
+                <input type="text" id="lineUserName" class="form-control" value="LINE 貴賓會員" placeholder="請輸入姓名">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label style="font-size: 0.85rem; color: #475569;">綁定 Email (選填)</label>
+                <input type="email" id="lineUserEmail" class="form-control" value="line_user@vip.line.me" placeholder="信箱">
+            </div>
+        </div>
+
+        <button class="btn-line-confirm" id="confirmBtn" onclick="handleMobileConfirm()">
+            🟢 同意並授權登入 (Confirm)
+        </button>
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 16px;">
+            確認後，電腦桌面端將自動同步登入並跳轉
+        </p>
+    </div>
+
+    <div class="auth-card d-none" id="successBox">
+        <div style="font-size: 4rem; color: #06c755; margin-bottom: 12px;">✅</div>
+        <h2 style="color: #1e293b; margin-bottom: 8px;">LINE 授權驗證成功！</h2>
+        <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">
+            您已成功授權登入！<br>
+            您的電腦桌面端瀏覽器已自動完成登入，您可以關閉此手機視窗或直接返回首頁。
+        </p>
+        <a href="/index.html" class="btn btn-outline btn-block" style="margin-top: 20px; display: block; text-decoration: none;">
+            🏠 前往飯店首頁
+        </a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const qrSessionId = params.get('qrSessionId');
+
+        if (!qrSessionId) {
+            document.getElementById('authBox').innerHTML = `
+                <div style="font-size: 3rem; color: #ef4444; margin-bottom: 12px;">⚠️</div>
+                <h3 style="color: #1e293b;">無效的掃碼授權連結</h3>
+                <p style="color: #64748b; font-size: 0.9rem;">請重新使用桌面端產生 QR Code 後再次掃描。</p>
+                <a href="/index.html" class="btn btn-primary btn-block" style="margin-top: 16px; display: block; text-decoration: none;">回首頁</a>
+            `;
+        }
+
+        async function handleMobileConfirm() {
+            const btn = document.getElementById('confirmBtn');
+            btn.disabled = true;
+            btn.innerText = '⏳ 正在授權中...';
+
+            const name = document.getElementById('lineUserName').value;
+            const email = document.getElementById('lineUserEmail').value;
+
+            try {
+                const response = await fetch(`/api/auth/oauth/line/qr-confirm?qrSessionId=${encodeURIComponent(qrSessionId)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || '授權失敗');
+                }
+
+                // If on mobile browser itself, save auth too
+                if (data.data && data.data.accessToken) {
+                    localStorage.setItem('token', data.data.accessToken);
+                    localStorage.setItem('user', JSON.stringify({
+                        id: data.data.userId,
+                        username: data.data.username,
+                        email: data.data.email,
+                        fullName: data.data.fullName || data.data.username,
+                        roles: data.data.roles
+                    }));
+                }
+
+                document.getElementById('authBox').classList.add('d-none');
+                document.getElementById('successBox').classList.remove('d-none');
+            } catch (err) {
+                alert('授權失敗: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = '🟢 同意並授權登入 (Confirm)';
+            }
+        }
+    </script>
+</body>
+</html>

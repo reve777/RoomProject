@@ -1,0 +1,83 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: hotel-booking-service
+  profiles:
+    active: dev
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@localhost:1521/FREEPDB1}
+    username: ${SPRING_DATASOURCE_USERNAME:ivan}
+    password: ${SPRING_DATASOURCE_PASSWORD:1234}
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      pool-name: HotelBookingHikariCP
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-16-char-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 50MB
+
+app:
+  admin-secret-key: ${ADMIN_SECRET_KEY:hk4g4hk4g4}
+  jwt:
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  upload:
+    dir: uploads
+  two-factor:
+    issuer: GrandLuxuryHotel
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:mock-google-client-id.apps.googleusercontent.com}
+      client-secret: ${GOOGLE_CLIENT_SECRET:mock-google-client-secret}
+      redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8080/index.html?oauth=google}
+    line:
+      channel-id: ${LINE_CHANNEL_ID:mock-line-channel-id}
+      channel-secret: ${LINE_CHANNEL_SECRET:mock-line-channel-secret}
+      redirect-uri: ${LINE_REDIRECT_URI:http://localhost:8080/index.html?oauth=line}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  health:
+    mail:
+      enabled: false

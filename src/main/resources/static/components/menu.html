@@ -1,0 +1,41 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h3>功能選單 (Menu)</h3>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item active" id="roomsMenuItem" onclick="app.switchView('roomsView')">
+            <span class="nav-icon">🛏️</span>
+            <span class="nav-text">房型探索與預覽</span>
+        </li>
+        <li class="nav-item guest-only" id="registerMenuItem" onclick="app.switchView('registerView')">
+            <span class="nav-icon">📝</span>
+            <span class="nav-text">新會員快速註冊</span>
+        </li>
+        <li class="nav-item" id="myBookingsMenuItem" onclick="app.switchView('myBookingsView')">
+            <span class="nav-icon">📅</span>
+            <span class="nav-text">我的預訂紀錄</span>
+        </li>
+        <li class="nav-item" id="profileMenuItem" onclick="app.switchView('profileView')">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">個人帳號與 2FA</span>
+        </li>
+        <!-- 管理者專屬選單 -->
+        <li class="nav-item admin-only d-none" id="adminRoomsMenuItem" onclick="app.switchView('adminRoomsView')">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-text">房型管理 (新增/修改/刪除/多圖)</span>
+        </li>
+        <li class="nav-item admin-only d-none" id="adminUsersMenuItem" onclick="app.switchView('adminUsersView')">
+            <span class="nav-icon">👥</span>
+            <span class="nav-text">使用者權限管理 (非管理者)</span>
+        </li>
+        <li class="nav-item admin-only d-none" id="adminBookingsMenuItem" onclick="app.switchView('adminBookingsView')">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">全館訂單總覽</span>
+        </li>
+    </ul>
+
+    <div class="system-status-box">
+        <div class="status-indicator online"></div>
+        <span class="status-text">API 狀態: 連線正常 </span>
+    </div>
+</aside>

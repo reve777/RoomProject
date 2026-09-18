@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尊榮會員註冊 - Grand Luxury Resort &amp; Hotel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .register-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 36px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .register-header .icon {
+            font-size: 3rem;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        .register-header h2 {
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+        .register-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: #f1f5f9;">
+
+    <div class="register-container">
+        <div class="register-header">
+            <span class="icon">🏨</span>
+            <h2>Grand Luxury 尊榮會員註冊</h2>
+            <p>註冊專屬帳號，立即享受豪華套房預訂、即時訂單確認信與安全保障</p>
+        </div>
+
+        <form id="standaloneRegisterForm" onsubmit="handleStandaloneRegister(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>使用者帳號 <span style="color: red;">*</span></label>
+                    <input type="text" id="regUsername" class="form-control" required placeholder="4~20 位英數字帳號" minlength="4">
+                </div>
+                <div class="form-group">
+                    <label>電子郵件 (收取確認信) <span style="color: red;">*</span></label>
+                    <input type="email" id="regEmail" class="form-control" required placeholder="yourname@gmail.com">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>設定登入密碼 <span style="color: red;">*</span></label>
+                    <input type="password" id="regPassword" class="form-control" required minlength="6" placeholder="至少 6 位字元" oninput="checkStandalonePwdMatch()">
+                </div>
+                <div class="form-group">
+                    <label>確認登入密碼 <span style="color: red;">*</span></label>
+                    <input type="password" id="regPasswordConfirm" class="form-control" required minlength="6" placeholder="請再次輸入密碼" oninput="checkStandalonePwdMatch()">
+                    <small id="pwdMatchStatus" style="display: block; margin-top: 4px; font-size: 0.8rem;"></small>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>真實姓名</label>
+                    <input type="text" id="regFullName" class="form-control" placeholder="王小明">
+                </div>
+                <div class="form-group">
+                    <label>聯絡電話</label>
+                    <input type="text" id="regPhone" class="form-control" placeholder="0912-345-678">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin: 16px 0;">
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.9rem; cursor: pointer;">
+                    <input type="checkbox" id="regAgreeTerms" required checked>
+                    我同意飯店服務條款與隱私權規範
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem;">
+                ✨ 確認註冊並登入
+            </button>
+        </form>
+
+        <div class="oauth-divider">其他快速管道</div>
+
+        <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <a href="/index.html" class="btn btn-outline" style="flex: 1; text-decoration: none; text-align: center;">
+                🏠 回首頁 / 會員登入
+            </a>
+            <button type="button" class="btn btn-guest" style="flex: 1;" onclick="handleQuickGuest()">
+                👤 訪客體驗免註冊
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function checkStandalonePwdMatch() {
+            const p1 = document.getElementById('regPassword').value;
+            const p2 = document.getElementById('regPasswordConfirm').value;
+            const status = document.getElementById('pwdMatchStatus');
+            if (!p2) {
+                status.innerText = '';
+                return;
+            }
+            if (p1 === p2) {
+                status.innerText = '✅ 密碼一致';
+                status.style.color = '#10b981';
+            } else {
+                status.innerText = '❌ 兩次密碼輸入不一致';
+                status.style.color = '#ef4444';
+            }
+        }
+
+        async function handleStandaloneRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+            const fullName = document.getElementById('regFullName').value;
+            const phone = document.getElementById('regPhone').value;
+
+            if (password !== passwordConfirm) {
+                alert('兩次密碼輸入不一致，請重新檢查！');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, fullName, phone })
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || '註冊失敗');
+                }
+
+                // Save auth to localStorage
+                localStorage.setItem('token', data.data.accessToken);
+                localStorage.setItem('user', JSON.stringify({
+                    id: data.data.userId,
+                    username: data.data.username,
+                    email: data.data.email,
+                    fullName: fullName || username,
+                    roles: data.data.roles
+                }));
+
+                alert('註冊成功！系統已發送歡迎信件至 ' + email + '，正在導向首頁...');
+                window.location.href = '/index.html';
+            } catch (err) {
+                alert('註冊失敗: ' + err.message);
+            }
+        }
+
+        async function handleQuickGuest() {
+            try {
+                const response = await fetch('/api/auth/guest-login', { method: 'POST' });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || '訪客登入失敗');
+
+                localStorage.setItem('token', data.data.accessToken);
+                localStorage.setItem('user', JSON.stringify({
+                    id: data.data.userId,
+                    username: data.data.username,
+                    email: data.data.email,
+                    fullName: data.data.fullName || data.data.username,
+                    roles: data.data.roles
+                }));
+                alert('訪客體驗登入成功！正在導向首頁...');
+                window.location.href = '/index.html';
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    </script>
+</body>
+</html>

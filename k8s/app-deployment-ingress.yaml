@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel-booking-deployment
+  labels:
+    app: hotel-booking
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hotel-booking
+  template:
+    metadata:
+      labels:
+        app: hotel-booking
+    spec:
+      containers:
+        - name: hotel-booking-app
+          image: hotel-booking-service:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 8443
+              name: https
+          envFrom:
+            - configMapRef:
+                name: hotel-booking-config
+            - secretRef:
+                name: hotel-booking-secret
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+          # Spring Boot Actuator Probes for Kubernetes
+          livenessProbe:
+            httpGet:
+              path: /api/actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 25
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotel-booking-service
+  labels:
+    app: hotel-booking
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+    - port: 8443
+      targetPort: 8443
+      name: https
+  selector:
+    app: hotel-booking
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hotel-booking-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  tls:
+    - hosts:
+        - booking.example.com
+      secretName: booking-tls-secret
+  rules:
+    - host: booking.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hotel-booking-service
+                port:
+                  number: 8080

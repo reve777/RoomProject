@@ -3,17 +3,15 @@ package com.booking;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * 系統主程式入口 (JDK 21+ / Spring Boot 3)
+ * 系統主程式入口 (JDK 25 / Spring Boot 3)
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.booking"})
-@EnableJpaRepositories(basePackages = {"com.booking.modules.user.repository", "com.booking.modules.hotel.repository"})
-@EntityScan(basePackages = {"com.booking.modules.user.entity", "com.booking.modules.hotel.entity"})
+@EnableJpaRepositories(basePackages = "com.booking")
+@EntityScan(basePackages = "com.booking")
 @EnableAsync
 public class HotelBookingApplication {
 

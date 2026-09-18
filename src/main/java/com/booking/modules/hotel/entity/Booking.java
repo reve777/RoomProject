@@ -2,7 +2,6 @@ package com.booking.modules.hotel.entity;
 
 import com.booking.modules.user.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,11 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "BOOKINGS")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Booking {
 
     @Id
@@ -44,7 +38,6 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    @Builder.Default
     private BookingStatus status = BookingStatus.PENDING_PAYMENT;
 
     @Column(name = "SPECIAL_REQUESTS", length = 1000)
@@ -57,4 +50,187 @@ public class Booking {
     @UpdateTimestamp
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    public Booking() {}
+
+    public Booking(Long id, String bookingNumber, User user, Room room, LocalDate checkInDate,
+                   LocalDate checkOutDate, Double totalPrice, BookingStatus status,
+                   String specialRequests, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.bookingNumber = bookingNumber;
+        this.user = user;
+        this.room = room;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.totalPrice = totalPrice;
+        this.status = status != null ? status : BookingStatus.PENDING_PAYMENT;
+        this.specialRequests = specialRequests;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBookingNumber() {
+        return bookingNumber;
+    }
+
+    public void setBookingNumber(String bookingNumber) {
+        this.bookingNumber = bookingNumber;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public LocalDate getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
+    }
+
+    public String getSpecialRequests() {
+        return specialRequests;
+    }
+
+    public void setSpecialRequests(String specialRequests) {
+        this.specialRequests = specialRequests;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public static BookingBuilder builder() {
+        return new BookingBuilder();
+    }
+
+    public static class BookingBuilder {
+        private Long id;
+        private String bookingNumber;
+        private User user;
+        private Room room;
+        private LocalDate checkInDate;
+        private LocalDate checkOutDate;
+        private Double totalPrice;
+        private BookingStatus status = BookingStatus.PENDING_PAYMENT;
+        private String specialRequests;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        public BookingBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public BookingBuilder bookingNumber(String bookingNumber) {
+            this.bookingNumber = bookingNumber;
+            return this;
+        }
+
+        public BookingBuilder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public BookingBuilder room(Room room) {
+            this.room = room;
+            return this;
+        }
+
+        public BookingBuilder checkInDate(LocalDate checkInDate) {
+            this.checkInDate = checkInDate;
+            return this;
+        }
+
+        public BookingBuilder checkOutDate(LocalDate checkOutDate) {
+            this.checkOutDate = checkOutDate;
+            return this;
+        }
+
+        public BookingBuilder totalPrice(Double totalPrice) {
+            this.totalPrice = totalPrice;
+            return this;
+        }
+
+        public BookingBuilder status(BookingStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public BookingBuilder specialRequests(String specialRequests) {
+            this.specialRequests = specialRequests;
+            return this;
+        }
+
+        public BookingBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public BookingBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Booking build() {
+            return new Booking(id, bookingNumber, user, room, checkInDate, checkOutDate, totalPrice, status, specialRequests, createdAt, updatedAt);
+        }
+    }
 }

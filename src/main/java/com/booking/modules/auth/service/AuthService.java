@@ -11,10 +11,8 @@ import com.booking.modules.user.entity.RoleName;
 import com.booking.modules.user.entity.User;
 import com.booking.modules.user.repository.RoleRepository;
 import com.booking.modules.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,10 +33,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
@@ -64,22 +62,52 @@ public class AuthService {
     @Value("${app.oauth.line.redirect-uri:http://localhost:8080/index.html?oauth=line}")
     private String lineRedirectUri;
 
+    public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository,
+                       RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                       JwtTokenProvider tokenProvider, TwoFactorService twoFactorService,
+                       SocialAuthService socialAuthService, EmailService emailService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
+        this.twoFactorService = twoFactorService;
+        this.socialAuthService = socialAuthService;
+        this.emailService = emailService;
+    }
+
     // Cache for Email OTP login
-    @Data
-    @AllArgsConstructor
     private static class OtpEntry {
-        private String code;
-        private long expiryTime;
+        private final String code;
+        private final long expiryTime;
+
+        public OtpEntry(String code, long expiryTime) {
+            this.code = code;
+            this.expiryTime = expiryTime;
+        }
+
+        public String getCode() { return code; }
+        public long getExpiryTime() { return expiryTime; }
     }
     private final Map<String, OtpEntry> emailOtpCache = new ConcurrentHashMap<>();
 
     // Cache for LINE QR Code sessions
-    @Data
-    @AllArgsConstructor
     private static class QrSessionEntry {
         private String status; // PENDING, CONFIRMED, EXPIRED
-        private long expiryTime;
+        private final long expiryTime;
         private AuthResponse authResponse;
+
+        public QrSessionEntry(String status, long expiryTime, AuthResponse authResponse) {
+            this.status = status;
+            this.expiryTime = expiryTime;
+            this.authResponse = authResponse;
+        }
+
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        public long getExpiryTime() { return expiryTime; }
+        public AuthResponse getAuthResponse() { return authResponse; }
+        public void setAuthResponse(AuthResponse authResponse) { this.authResponse = authResponse; }
     }
     private final Map<String, QrSessionEntry> lineQrSessionMap = new ConcurrentHashMap<>();
 
@@ -252,7 +280,7 @@ public class AuthService {
                 </div>
                 <div style="padding: 24px; color: #334155; line-height: 1.6;">
                     <p>親愛的貴賓您好：</p>
-                    <p>您正在使用 Google Mail 電子信箱進行身分驗證登入，您的 6 位數一次性登入驗證碼為：</p>
+                    <p>您正在使用 Google Mail 電子信箱進行身份驗證登入，您的 6 位數一次性登入驗證碼為：</p>
                     <div style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #2563eb; background: #eff6ff; padding: 16px; text-align: center; border-radius: 6px; margin: 20px 0; border: 1px dashed #bfdbfe;">
                         %s
                     </div>

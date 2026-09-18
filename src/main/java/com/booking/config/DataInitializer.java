@@ -9,8 +9,8 @@ import com.booking.modules.user.entity.RoleName;
 import com.booking.modules.user.entity.User;
 import com.booking.modules.user.repository.RoleRepository;
 import com.booking.modules.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,15 +19,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Set;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository,
+                           RoomRepository roomRepository, PasswordEncoder passwordEncoder) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.roomRepository = roomRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional

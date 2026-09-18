@@ -9,7 +9,6 @@ import com.booking.modules.hotel.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,11 +18,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
-@RequiredArgsConstructor
 @Tag(name = "Booking API", description = "線上訂房、查詢個人訂單、全館訂單與取消預約 (自動觸發 Email 通知)")
 public class BookingController {
 
     private final BookingService bookingService;
+
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
 
     @PostMapping
     @Operation(summary = "會員建立線上訂房預約")

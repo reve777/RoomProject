@@ -4,8 +4,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base32;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-@Slf4j
 @Service
 public class TwoFactorService {
+
+    private static final Logger log = LoggerFactory.getLogger(TwoFactorService.class);
 
     @Value("${app.two-factor.issuer:HotelBookingApp}")
     private String issuer;

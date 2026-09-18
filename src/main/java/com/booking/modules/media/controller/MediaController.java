@@ -4,7 +4,6 @@ import com.booking.common.ApiResponse;
 import com.booking.modules.media.service.FileStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,11 +17,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/media")
-@RequiredArgsConstructor
 @Tag(name = "Media API", description = "飯店房型多圖片上傳與靜態資源存取")
 public class MediaController {
 
     private final FileStorageService fileStorageService;
+
+    public MediaController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
 
     @PostMapping("/upload-single")
     @PreAuthorize("hasRole('ADMIN')")

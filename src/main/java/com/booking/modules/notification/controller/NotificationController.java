@@ -6,7 +6,6 @@ import com.booking.modules.notification.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/notifications")
-@RequiredArgsConstructor
 @Tag(name = "Notification API", description = "Email 郵件發送與系統通知管理")
 public class NotificationController {
 
     private final EmailService emailService;
+
+    public NotificationController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @PostMapping("/email/send")
     @PreAuthorize("hasRole('ADMIN')")

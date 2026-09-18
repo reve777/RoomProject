@@ -1,8 +1,5 @@
 package com.booking.modules.hotel.entity;
 
-import lombok.Getter;
-
-@Getter
 public enum BookingStatus {
     PENDING_PAYMENT("下單成功未付款"),
     PAID("下單成功已付款"),
@@ -15,5 +12,9 @@ public enum BookingStatus {
 
     BookingStatus(String description) {
         this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

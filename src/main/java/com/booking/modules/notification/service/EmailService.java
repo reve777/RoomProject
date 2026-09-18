@@ -2,8 +2,8 @@ package com.booking.modules.notification.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,16 +16,21 @@ import org.thymeleaf.context.Context;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class EmailService {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
     @Value("${spring.mail.username:noreply@hotelbooking.com}")
     private String fromEmail;
+
+    public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
+        this.mailSender = mailSender;
+        this.templateEngine = templateEngine;
+    }
 
     /**
      * 發送自訂文字/HTML 郵件

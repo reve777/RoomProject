@@ -7,8 +7,8 @@ import com.booking.modules.user.entity.RoleName;
 import com.booking.modules.user.entity.User;
 import com.booking.modules.user.repository.RoleRepository;
 import com.booking.modules.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,14 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.UUID;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class SocialAuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(SocialAuthService.class);
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public SocialAuthService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Transactional
     public User processSocialUser(SocialLoginRequest request) {

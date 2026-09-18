@@ -7,7 +7,6 @@ import com.booking.modules.hotel.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +15,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
-@RequiredArgsConstructor
 @Tag(name = "Room API", description = "飯店房型公開查詢、預覽與管理者 CRUD (支援多張相片)")
 public class RoomController {
 
     private final HotelService hotelService;
+
+    public RoomController(HotelService hotelService) {
+        this.hotelService = hotelService;
+    }
 
     @GetMapping
     @Operation(summary = "公開查詢所有上架房型列表")

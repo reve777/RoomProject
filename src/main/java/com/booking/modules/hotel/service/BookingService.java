@@ -14,8 +14,8 @@ import com.booking.modules.hotel.repository.RoomRepository;
 import com.booking.modules.notification.service.EmailService;
 import com.booking.modules.user.entity.User;
 import com.booking.modules.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +26,25 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class BookingService {
+
+    private static final Logger log = LoggerFactory.getLogger(BookingService.class);
 
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+
+    public BookingService(BookingRepository bookingRepository,
+                          RoomRepository roomRepository,
+                          UserRepository userRepository,
+                          EmailService emailService) {
+        this.bookingRepository = bookingRepository;
+        this.roomRepository = roomRepository;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+    }
 
     @Transactional
     public BookingDto createBooking(Long userId, BookingCreateRequest request) {

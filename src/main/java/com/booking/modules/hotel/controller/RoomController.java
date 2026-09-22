@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rooms")
+@RequestMapping("/api")
 @Tag(name = "Room API", description = "飯店房型公開查詢、預覽與管理者 CRUD (支援多張相片)")
 public class RoomController {
 
@@ -24,26 +24,26 @@ public class RoomController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping
+    @GetMapping({"/rooms", "/admin/rooms"})
     @Operation(summary = "公開查詢所有上架房型列表")
     public ResponseEntity<ApiResponse<List<RoomDto>>> getAllRooms() {
         return ResponseEntity.ok(ApiResponse.success("房型列表取得成功", hotelService.getAllRooms(null)));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping({"/rooms/{id}", "/admin/rooms/{id}"})
     @Operation(summary = "公開查詢單一房型詳情 (含多組圖片藝廊)")
     public ResponseEntity<ApiResponse<RoomDto>> getRoomById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success("房型詳情取得成功", hotelService.getRoomById(id)));
     }
 
-    @PostMapping
+    @PostMapping({"/rooms", "/admin/rooms"})
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "管理者新增房型 (支援多組圖片網址/檔案)")
     public ResponseEntity<ApiResponse<RoomDto>> createRoom(@Valid @RequestBody RoomCreateUpdateDto dto) {
         return ResponseEntity.ok(ApiResponse.success("房型新增成功", hotelService.createRoom(dto)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping({"/rooms/{id}", "/admin/rooms/{id}"})
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "管理者修改房型資訊與圖片")
     public ResponseEntity<ApiResponse<RoomDto>> updateRoom(
@@ -52,7 +52,7 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.success("房型修改成功", hotelService.updateRoom(id, dto)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping({"/rooms/{id}", "/admin/rooms/{id}"})
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "管理者刪除房型")
     public ResponseEntity<ApiResponse<Void>> deleteRoom(@PathVariable Long id) {

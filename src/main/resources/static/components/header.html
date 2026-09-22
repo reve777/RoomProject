@@ -1,19 +1,70 @@
+<!-- Top Promotional Marquee Ticker -->
+<div class="promo-marquee-bar">
+    <div class="promo-fixed-label">
+        <span>🔥 限時促銷</span>
+    </div>
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}" class="marquee-item">
+                <span>🏨</span>
+                <span><strong>【春季線上訂房特賣】</strong> 全館尊爵客房與景觀 Villa 享限時 <strong>8 折</strong> 優惠，預訂即贈精緻晨光早餐！</span>
+            </a>
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}" class="marquee-item">
+                <span>🛍️</span>
+                <span><strong>【MOMO & 蝦皮專區】</strong> 熱銷 3C 數位、日韓潮流服飾、專櫃美妝全通路同步上架！</span>
+            </a>
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}" class="marquee-item">
+                <span>🚚</span>
+                <span><strong>【全館免運直送】</strong> 購物商城全館滿 <strong>NT$ 1,500</strong> 即享黑貓宅急便免運費送到府！</span>
+            </a>
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}" class="marquee-item">
+                <span>💳</span>
+                <span><strong>【多元安心支付】</strong> 支援 LINE Pay 快捷支付、信用卡 0 利率與超商貨到付款，結帳即時寄發 Email 訂單明細！</span>
+            </a>
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}" class="marquee-item">
+                <span>📱</span>
+                <span><strong>【3C 旗艦盛典】</strong> iPhone 16 Pro Max、ROG 電競筆電、Dyson 吹風機超殺特惠現貨供應中！</span>
+            </a>
+            <!-- Duplicate for infinite seamless scroll -->
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}" class="marquee-item">
+                <span>🏨</span>
+                <span><strong>【春季線上訂房特賣】</strong> 全館尊爵客房與景觀 Villa 享限時 <strong>8 折</strong> 優惠，預訂即贈精緻晨光早餐！</span>
+            </a>
+            <a href="javascript:void(0)" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}" class="marquee-item">
+                <span>🛍️</span>
+                <span><strong>【MOMO & 蝦皮專區】</strong> 熱銷 3C 數位、日韓潮流服飾、專櫃美妝全通路同步上架！</span>
+            </a>
+        </div>
+    </div>
+</div>
+
 <header class="navbar">
     <div class="nav-container">
-        <div class="logo" style="cursor: pointer;" onclick="app.switchView('roomsView')">
+        <div class="logo" style="cursor: pointer;" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}">
             <span class="icon">🏨</span>
-            <span class="brand-name">Grand Luxury Resort &amp; Hotel</span>
+            <span class="brand-name">Grand Luxury 多功能綜合平台</span>
         </div>
-        <div class="header-right">
+        
+        <!-- Center Quick Switch Tabs -->
+        <div style="display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 10px; border: 1px solid #e2e8f0;">
+            <button type="button" class="btn btn-sm" id="headerNavBookingBtn" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}" style="background: #2563eb; color: white; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                <span>🏨 飯店訂房系統</span>
+            </button>
+            <button type="button" class="btn btn-sm" id="headerNavShopBtn" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}" style="background: transparent; color: #475569; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                <span>🛍️ 電商購物商城</span>
+            </button>
+        </div>
+
+        <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
             <div id="authGuestSection" class="auth-buttons">
-                <button class="btn btn-guest" onclick="app.handleGuestLogin()">👤 訪客登入</button>
-                <button class="btn btn-outline" onclick="app.showModal('loginModal')">會員登入</button>
-                <button class="btn btn-primary" onclick="app.switchView('registerView')">📝 免費註冊</button>
+                <button class="btn btn-guest" onclick="if(window.app){app.handleGuestLogin()}else if(window.quickShopGuestLogin){quickShopGuestLogin()}else{window.location.href='/index.html?action=guest'}">👤 訪客登入</button>
+                <button class="btn btn-outline" onclick="if(window.app){app.showModal('loginModal')}else if(window.openShopAuthModal){openShopAuthModal('login')}else{window.location.href='/index.html?action=login'}">會員登入</button>
+                <button class="btn btn-primary" onclick="if(window.app){app.switchView('registerView')}else if(window.openShopAuthModal){openShopAuthModal('register')}else{window.location.href='/index.html?action=register'}">📝 免費註冊</button>
             </div>
             <div id="authUserSection" class="user-menu d-none">
                 <span id="userGreeting" class="user-badge">歡迎, 訪客</span>
-                <button class="btn btn-sm btn-outline" onclick="app.switchView('profileView')">個人中心</button>
-                <button class="btn btn-sm btn-danger" onclick="app.logout()">登出</button>
+                <button class="btn btn-sm btn-outline" onclick="if(window.app){app.switchView('profileView')}else{window.location.href='/index.html?view=profileView'}">個人中心</button>
+                <button class="btn btn-sm btn-danger" onclick="if(window.app){app.logout()}else{localStorage.removeItem('token');localStorage.removeItem('user');window.location.reload();}">登出</button>
             </div>
         </div>
     </div>

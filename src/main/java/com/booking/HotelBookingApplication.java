@@ -11,7 +11,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class HotelBookingApplication {
 
+    static {
+        // 設定忽略 class format 版本不相容警告 (專為 JDK 25 與 Spring 6 Classpath Scanner 兼容)
+        System.setProperty("spring.classformat.ignore", "true");
+    }
+
     public static void main(String[] args) {
+        System.setProperty("spring.classformat.ignore", "true");
+
         System.out.println("=================================================");
         System.out.println(" 啟動 Hotel Booking & Management Enterprise System ");
         System.out.println(" JDK 版本: " + System.getProperty("java.version"));

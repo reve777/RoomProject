@@ -1,41 +1,102 @@
 <aside class="sidebar">
-    <div class="sidebar-header">
-        <h3>功能選單 (Menu)</h3>
-    </div>
-    <ul class="nav-menu">
-        <li class="nav-item active" id="roomsMenuItem" onclick="app.switchView('roomsView')">
-            <span class="nav-icon">🛏️</span>
-            <span class="nav-text">房型探索與預覽</span>
-        </li>
-        <li class="nav-item guest-only" id="registerMenuItem" onclick="app.switchView('registerView')">
-            <span class="nav-icon">📝</span>
-            <span class="nav-text">新會員快速註冊</span>
-        </li>
-        <li class="nav-item" id="myBookingsMenuItem" onclick="app.switchView('myBookingsView')">
-            <span class="nav-icon">📅</span>
-            <span class="nav-text">我的預訂紀錄</span>
-        </li>
-        <li class="nav-item" id="profileMenuItem" onclick="app.switchView('profileView')">
-            <span class="nav-icon">👤</span>
-            <span class="nav-text">個人帳號與 2FA</span>
-        </li>
-        <!-- 管理者專屬選單 -->
-        <li class="nav-item admin-only d-none" id="adminRoomsMenuItem" onclick="app.switchView('adminRoomsView')">
-            <span class="nav-icon">⚙️</span>
-            <span class="nav-text">房型管理 (新增/修改/刪除/多圖)</span>
-        </li>
-        <li class="nav-item admin-only d-none" id="adminUsersMenuItem" onclick="app.switchView('adminUsersView')">
-            <span class="nav-icon">👥</span>
-            <span class="nav-text">使用者權限管理 (非管理者)</span>
-        </li>
-        <li class="nav-item admin-only d-none" id="adminBookingsMenuItem" onclick="app.switchView('adminBookingsView')">
-            <span class="nav-icon">📊</span>
-            <span class="nav-text">全館訂單總覽</span>
-        </li>
-    </ul>
+    <div>
+        <!-- Section 1: 🛍️ 電商購物分類 (Shop Categories) -->
+        <div id="sidebarSection1Title" class="sidebar-section-title">
+            <span>🛍️ 電商購物分類 (Shop Categories)</span>
+        </div>
 
+        <ul class="nav-menu" id="shopCategoriesNavMenu">
+            <li class="nav-item active" id="sidebarShopCat-all" onclick="if(window.app){app.filterShopCategory('ALL')}else if(window.filterCategory){filterCategory('ALL')}">
+                <span class="nav-icon">🛍️</span>
+                <span class="nav-text">全部商品</span>
+            </li>
+            <li class="nav-item" id="sidebarShopCat-3c" onclick="if(window.app){app.filterShopCategory('📱 3C 數位旗艦')}else if(window.filterCategory){filterCategory('📱 3C 數位旗艦')}">
+                <span class="nav-icon">📱</span>
+                <span class="nav-text">3C 數位旗艦</span>
+            </li>
+            <li class="nav-item" id="sidebarShopCat-fashion" onclick="if(window.app){app.filterShopCategory('👗 日韓流行服飾')}else if(window.filterCategory){filterCategory('👗 日韓流行服飾')}">
+                <span class="nav-icon">👗</span>
+                <span class="nav-text">日韓流行服飾</span>
+            </li>
+            <li class="nav-item" id="sidebarShopCat-beauty" onclick="if(window.app){app.filterShopCategory('💄 專櫃美妝保養')}else if(window.filterCategory){filterCategory('💄 專櫃美妝保養')}">
+                <span class="nav-icon">💄</span>
+                <span class="nav-text">專櫃美妝保養</span>
+            </li>
+            <li class="nav-item" id="sidebarShopCat-appliances" onclick="if(window.app){app.filterShopCategory('🏠 智能生活家電')}else if(window.filterCategory){filterCategory('🏠 智能生活家電')}">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">智能生活家電</span>
+            </li>
+            <li class="nav-item" id="sidebarShopCat-gourmet" onclick="if(window.app){app.filterShopCategory('🍷 產地頂級美饌')}else if(window.filterCategory){filterCategory('🍷 產地頂級美饌')}">
+                <span class="nav-icon">🍷</span>
+                <span class="nav-text">產地頂級美饌</span>
+            </li>
+        </ul>
+
+        <!-- Section 2: ✨ 核心渡假服務 (Services) 放在分類列表下方 -->
+        <div class="sidebar-section-title" style="margin-top: 18px;">
+            <span>✨ 核心渡假服務 (Services)</span>
+        </div>
+        <ul class="nav-menu" id="servicesNavMenu">
+            <li class="nav-item" id="shopMenuItem" onclick="if(window.app){app.switchView('shopView')}else{window.location.href='/index.html?view=shopView'}">
+                <span class="nav-icon">🛍️</span>
+                <span class="nav-text">尊榮電商購物商城</span>
+            </li>
+            <li class="nav-item" id="roomsMenuItem" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}">
+                <span class="nav-icon">🏨</span>
+                <span class="nav-text">線上訂房系統</span>
+            </li>
+            <li class="nav-item" id="diningMenuItem" onclick="if(window.app){app.switchView('diningView')}else{window.location.href='/index.html?view=diningView'}">
+                <span class="nav-icon">🍽️</span>
+                <span class="nav-text">精緻美饌預約</span>
+            </li>
+            <li class="nav-item" id="ticketsMenuItem" onclick="if(window.app){app.switchView('ticketsView')}else{window.location.href='/index.html?view=ticketsView'}">
+                <span class="nav-icon">🎟️</span>
+                <span class="nav-text">票券體驗商城</span>
+            </li>
+        </ul>
+
+        <!-- Section 3: 👤 會員個人專區 (Member) -->
+        <div class="sidebar-section-title" style="margin-top: 18px;">
+            <span>👤 會員個人專區 (Member)</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item" id="myBookingsMenuItem" onclick="if(window.app){app.switchView('myBookingsView')}else{window.location.href='/index.html?view=myBookingsView'}">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">我的預訂紀錄</span>
+            </li>
+            <li class="nav-item guest-only" id="registerMenuItem" onclick="if(window.app){app.switchView('registerView')}else{window.location.href='/index.html?view=registerView'}">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">新會員快速註冊</span>
+            </li>
+            <li class="nav-item" id="profileMenuItem" onclick="if(window.app){app.switchView('profileView')}else{window.location.href='/index.html?view=profileView'}">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">個人帳號與 2FA</span>
+            </li>
+        </ul>
+
+        <!-- Section 4: 🛡️ 系統管理專區 (Admin) -->
+        <div class="sidebar-section-title admin-only d-none" style="margin-top: 18px;">
+            <span>🛡️ 系統管理專區 (Admin)</span>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item admin-only d-none" id="adminRoomsMenuItem" onclick="if(window.app){app.switchView('adminRoomsView')}else{window.location.href='/index.html?view=adminRoomsView'}">
+                <span class="nav-icon">🛏️</span>
+                <span class="nav-text">房型管理維護</span>
+            </li>
+            <li class="nav-item admin-only d-none" id="adminUsersMenuItem" onclick="if(window.app){app.switchView('adminUsersView')}else{window.location.href='/index.html?view=adminUsersView'}">
+                <span class="nav-icon">👥</span>
+                <span class="nav-text">使用者權限管理</span>
+            </li>
+            <li class="nav-item admin-only d-none" id="adminBookingsMenuItem" onclick="if(window.app){app.switchView('adminBookingsView')}else{window.location.href='/index.html?view=adminBookingsView'}">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">全館訂單總覽</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Bottom API Status -->
     <div class="system-status-box">
         <div class="status-indicator online"></div>
-        <span class="status-text">API 狀態: 連線正常 </span>
+        <span class="status-text">平台狀態: 全部服務在線運作中</span>
     </div>
 </aside>

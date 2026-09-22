@@ -15,6 +15,8 @@ public class RoomCreateUpdateDto {
     @NotBlank(message = "房型類別不得為空")
     private String roomType;
 
+    private String city;
+
     @NotNull(message = "每晚價格不得為空")
     @Min(value = 0, message = "價格必須大於或等於 0")
     private Double pricePerNight;
@@ -34,10 +36,11 @@ public class RoomCreateUpdateDto {
 
     public RoomCreateUpdateDto() {}
 
-    public RoomCreateUpdateDto(String name, String roomType, Double pricePerNight, Integer capacity,
+    public RoomCreateUpdateDto(String name, String roomType, String city, Double pricePerNight, Integer capacity,
                                String description, RoomStatus status, String amenities, List<String> imageUrls) {
         this.name = name;
         this.roomType = roomType;
+        this.city = city;
         this.pricePerNight = pricePerNight;
         this.capacity = capacity;
         this.description = description;
@@ -60,6 +63,14 @@ public class RoomCreateUpdateDto {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public Double getPricePerNight() {

@@ -9,6 +9,7 @@ public class RoomDto {
     private Long id;
     private String name;
     private String roomType;
+    private String city;
     private Double pricePerNight;
     private Integer capacity;
     private String description;
@@ -20,12 +21,13 @@ public class RoomDto {
 
     public RoomDto() {}
 
-    public RoomDto(Long id, String name, String roomType, Double pricePerNight, Integer capacity,
+    public RoomDto(Long id, String name, String roomType, String city, Double pricePerNight, Integer capacity,
                    String description, RoomStatus status, String amenities, List<RoomImageDto> images,
                    String primaryImageUrl, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.roomType = roomType;
+        this.city = city;
         this.pricePerNight = pricePerNight;
         this.capacity = capacity;
         this.description = description;
@@ -58,6 +60,14 @@ public class RoomDto {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public Double getPricePerNight() {
@@ -132,6 +142,7 @@ public class RoomDto {
         private Long id;
         private String name;
         private String roomType;
+        private String city;
         private Double pricePerNight;
         private Integer capacity;
         private String description;
@@ -153,6 +164,11 @@ public class RoomDto {
 
         public RoomDtoBuilder roomType(String roomType) {
             this.roomType = roomType;
+            return this;
+        }
+
+        public RoomDtoBuilder city(String city) {
+            this.city = city;
             return this;
         }
 
@@ -197,7 +213,7 @@ public class RoomDto {
         }
 
         public RoomDto build() {
-            return new RoomDto(id, name, roomType, pricePerNight, capacity, description, status, amenities, images, primaryImageUrl, createdAt);
+            return new RoomDto(id, name, roomType, city, pricePerNight, capacity, description, status, amenities, images, primaryImageUrl, createdAt);
         }
     }
 }

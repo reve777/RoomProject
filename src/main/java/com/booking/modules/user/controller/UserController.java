@@ -2,6 +2,7 @@ package com.booking.modules.user.controller;
 
 import com.booking.common.ApiResponse;
 import com.booking.modules.auth.security.UserPrincipal;
+import com.booking.modules.user.dto.PasswordChangeRequest;
 import com.booking.modules.user.dto.UpdateUserDto;
 import com.booking.modules.user.dto.UserAdminUpdateDto;
 import com.booking.modules.user.dto.UserProfileDto;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "User Management API", description = "使用者個人資料管理與管理者權限管理 (管理者只能修改非管理者)")
+@Tag(name = "User Management API", description = "使用者個人資料管理與管理者權限管理")
 public class UserController {
 
     private final UserService userService;
@@ -41,6 +42,23 @@ public class UserController {
             @Valid @RequestBody UpdateUserDto request) {
         UserProfileDto updated = userService.updateMyProfile(principal.getId(), request);
         return ResponseEntity.ok(ApiResponse.success("個人資料更新成功", updated));
+    }
+
+    @PutMapping("/users/me/password")
+    @Operation(summary = "會員變更登入密碼")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody PasswordChangeRequest request) {
+        userService.changePassword(principal.getId(), request);
+        return ResponseEntity.ok(ApiResponse.success("密碼變更成功，請妥善保管！", null));
+    }
+
+    @GetMapping("/admin/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "管理者查詢全館所有使用者列表")
+    public ResponseEntity<ApiResponse<List<UserProfileDto>>> getAllUsers() {
+        List<UserProfileDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(ApiResponse.success("取得全館使用者列表成功", users));
     }
 
     @GetMapping("/admin/users/non-admin")
@@ -67,5 +85,26 @@ public class UserController {
             @Valid @RequestBody UserAdminUpdateDto request) {
         UserProfileDto updated = userService.updateNonAdminUser(userId, request);
         return ResponseEntity.ok(ApiResponse.success("非管理者資料更新成功", updated));
+    }
+
+    @PutMapping("/admin/users/{userId}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "管理者變更使用者角色權限 (ROLE_ADMIN 或 ROLE_USER)")
+    public ResponseEntity<ApiResponse<UserProfileDto>> changeUserRole(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long userId,
+            @RequestParam String role) {
+        UserProfileDto updated = userService.changeUserRole(userId, role, principal.getId());
+        return ResponseEntity.ok(ApiResponse.success("使用者權限角色更新成功", updated));
+    }
+
+    @DeleteMapping("/admin/users/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "管理者刪除使用者帳號")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long userId) {
+        userService.deleteUser(userId, principal.getId());
+        return ResponseEntity.ok(ApiResponse.success("使用者帳號已成功刪除", null));
     }
 }

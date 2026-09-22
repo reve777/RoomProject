@@ -23,7 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +38,9 @@ public class BookingService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+
+    // 後端防呆：記錄使用者最近一次下單時間，防止連點與併發重複下單 (3 秒防抖防呆視窗)
+    private final Map<Long, Long> userLastOrderTime = new ConcurrentHashMap<>();
 
     public BookingService(BookingRepository bookingRepository,
                           RoomRepository roomRepository,
@@ -48,8 +54,31 @@ public class BookingService {
 
     @Transactional
     public BookingDto createBooking(Long userId, BookingCreateRequest request) {
+        long now = System.currentTimeMillis();
+        Long lastTime = userLastOrderTime.get(userId);
+
+        // 1. 防呆機制一：頻率限制（3秒內連點直接攔截）
+        if (lastTime != null && (now - lastTime) < 3000) {
+            log.warn("使用者 ID {} 觸發快速連點下單防呆攔截 (距上次下單 {} ms)", userId, now - lastTime);
+            throw new BadRequestException("系統正在處理您的訂房請求，請勿頻繁重複點擊下單！");
+        }
+        userLastOrderTime.put(userId, now);
+
         if (!request.getCheckOutDate().isAfter(request.getCheckInDate())) {
             throw new BadRequestException("退房日期必須晚於入住日期");
+        }
+
+        // 2. 防呆機制二：同一會員不得在相同日期重複下單同一房型（未付款、已付款或已入住）
+        boolean hasDuplicateBooking = bookingRepository.existsActiveBookingForUser(
+                userId,
+                request.getRoomId(),
+                request.getCheckInDate(),
+                request.getCheckOutDate(),
+                Set.of(BookingStatus.PENDING_PAYMENT, BookingStatus.PAID, BookingStatus.CHECKED_IN)
+        );
+
+        if (hasDuplicateBooking) {
+            throw new BadRequestException("您已於該時段 (" + request.getCheckInDate() + " ~ " + request.getCheckOutDate() + ") 預訂過此房型，請至「我的預訂紀錄」查看或勿重複下單！");
         }
 
         User user = userRepository.findById(userId)

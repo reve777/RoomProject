@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -40,15 +39,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 
@@ -58,7 +52,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, DaoAuthenticationProvider authProvider) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
@@ -78,6 +72,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/",
                     "/index.html",
+                    "/shop.html",
                     "/register.html",
                     "/line-auth.html",
                     "/*.html",
@@ -100,14 +95,29 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/**", "/h2-console/**").permitAll()
                 // Public Auth & Social Login
                 .requestMatchers("/api/auth/**").permitAll()
-                // Public Room browsing
-                .requestMatchers(HttpMethod.GET, "/api/rooms/**", "/api/media/view/**").permitAll()
+                // Public Shop API (Products, Categories, Mock Checkout, Email)
+                .requestMatchers("/api/shop/**").permitAll()
+                // Public Room, Dining & Ticket browsing
+                .requestMatchers(HttpMethod.GET,
+                    "/api/rooms",
+                    "/api/rooms/**",
+                    "/api/media/view/**",
+                    "/api/dining/restaurants",
+                    "/api/dining/restaurants/**",
+                    "/api/tickets",
+                    "/api/tickets/**"
+                ).permitAll()
+                // Public / Guest creation of dining reservation and tickets
+                .requestMatchers(HttpMethod.POST,
+                    "/api/dining/reservations",
+                    "/api/tickets/orders"
+                ).permitAll()
                 // Admin specific URLs
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // Any other request requires authentication
                 .anyRequest().authenticated()
             )
-            .authenticationProvider(authenticationProvider())
+            .authenticationProvider(authProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -117,7 +127,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);

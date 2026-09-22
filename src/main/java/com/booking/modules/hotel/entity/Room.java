@@ -22,6 +22,9 @@ public class Room {
     @Column(name = "ROOM_TYPE", nullable = false, length = 50)
     private String roomType;
 
+    @Column(name = "CITY", length = 50)
+    private String city;
+
     @Column(name = "PRICE_PER_NIGHT", nullable = false)
     private Double pricePerNight;
 
@@ -53,12 +56,13 @@ public class Room {
 
     public Room() {}
 
-    public Room(Long id, String name, String roomType, Double pricePerNight, Integer capacity,
+    public Room(Long id, String name, String roomType, String city, Double pricePerNight, Integer capacity,
                 String description, RoomStatus status, String amenities, List<RoomImage> images,
                 LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.roomType = roomType;
+        this.city = city;
         this.pricePerNight = pricePerNight;
         this.capacity = capacity;
         this.description = description;
@@ -101,6 +105,14 @@ public class Room {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public Double getPricePerNight() {
@@ -175,6 +187,7 @@ public class Room {
         private Long id;
         private String name;
         private String roomType;
+        private String city;
         private Double pricePerNight;
         private Integer capacity;
         private String description;
@@ -196,6 +209,11 @@ public class Room {
 
         public RoomBuilder roomType(String roomType) {
             this.roomType = roomType;
+            return this;
+        }
+
+        public RoomBuilder city(String city) {
+            this.city = city;
             return this;
         }
 
@@ -240,7 +258,7 @@ public class Room {
         }
 
         public Room build() {
-            return new Room(id, name, roomType, pricePerNight, capacity, description, status, amenities, images, createdAt, updatedAt);
+            return new Room(id, name, roomType, city, pricePerNight, capacity, description, status, amenities, images, createdAt, updatedAt);
         }
     }
 }

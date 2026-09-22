@@ -3,9 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Luxury Resort &amp; Hotel - 線上訂房與會員系統</title>
+    <title>Grand Luxury 頂級度假酒店與全方位奢華生活平台</title>
     <link rel="icon" href="/favicon.ico" type="image/svg+xml">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=20260922_v5">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-banner {
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600') center/cover no-repeat;
+            color: #ffffff;
+            padding: 56px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+        .hero-banner h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .hero-banner p {
+            font-size: 1.05rem;
+            color: #e2e8f0;
+            max-width: 680px;
+            margin: 0 auto 24px auto;
+        }
+        .city-tags-wrapper {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .city-tag-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .city-tag-btn:hover, .city-tag-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .sub-tab-btn {
+            padding: 10px 20px;
+            font-weight: 700;
+            color: #64748b;
+            border: none;
+            background: transparent;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sub-tab-btn.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        .cat-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            background: #f1f5f9;
+            color: #475569;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+        .cat-pill:hover, .cat-pill.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+    </style>
 </head>
 <body>
 
@@ -19,260 +100,436 @@
         <!-- Main Dynamic View Area -->
         <main class="main-content">
 
-            <!-- 1. 房型探索與預覽 View -->
+            <!-- ==================== VIEW 1: 飯店房型探索 (Rooms View) ==================== -->
             <section id="roomsView" class="view-section">
-                <div class="content-header" style="flex-direction: column; align-items: flex-start; gap: 16px; margin-bottom: 24px;">
-                    <div>
-                        <h2>精選房型預覽 (Room Exploration)</h2>
-                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">探索 Grand Luxury 頂級客房、景觀套房與獨棟 Villa，尊享極致奢華度假體驗</p>
-                    </div>
-
-                    <!-- Search and Filter Bar -->
-                    <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; background: white; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="flex: 2; min-width: 220px;">
-                            <input type="text" id="roomSearchKeyword" class="form-control" placeholder="🔍 搜尋房型名稱、特色關鍵字 (如: 浴缸、陽台)..." oninput="app.filterRooms()">
-                        </div>
-                        <div style="flex: 1; min-width: 150px;">
-                            <select id="roomFilterType" class="form-control" onchange="app.filterRooms()">
-                                <option value="">🏢 全部房型類別</option>
-                                <option value="海景尊爵套房">海景尊爵套房</option>
-                                <option value="雙人經典房">雙人經典房</option>
-                                <option value="頂級 Villa">頂級 Villa</option>
-                                <option value="景觀家庭房">景觀家庭房</option>
-                                <option value="浪漫蜜月房">浪漫蜜月房</option>
-                            </select>
-                        </div>
-                        <div style="flex: 1; min-width: 130px;">
-                            <select id="roomFilterCapacity" class="form-control" onchange="app.filterRooms()">
-                                <option value="0">👥 容納人數不限</option>
-                                <option value="2">2 人</option>
-                                <option value="4">4 人</option>
-                                <option value="6">6 人以上</option>
-                            </select>
-                        </div>
-                        <div style="flex: 1; min-width: 140px;">
-                            <select id="roomSortOrder" class="form-control" onchange="app.filterRooms()">
-                                <option value="default">⇅ 預設推薦排序</option>
-                                <option value="price_asc">💰 價格：低至高</option>
-                                <option value="price_desc">💎 價格：高至低</option>
-                            </select>
-                        </div>
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <h1>✨ 探索世界級頂級奢華旅宿</h1>
+                    <p>尊享全台奢華客房、海景總統套房與私人溫泉獨棟 Villa，盡享極致度假尊榮禮遇</p>
+                    <div style="display: flex; justify-content: center; gap: 12px;">
+                        <button class="btn btn-primary" onclick="document.getElementById('roomsListContainer').scrollIntoView({behavior:'smooth'})">
+                            <i class="fa-solid fa-magnifying-glass"></i> 即刻探索尊榮客房
+                        </button>
                     </div>
                 </div>
+
+                <!-- City / Region Filter Pills -->
+                <div class="city-tags-wrapper">
+                    <button type="button" class="city-tag-btn active" id="regionBtn-all" onclick="app.setRegionFilter('ALL')">🌐 全部地區 (All)</button>
+                    <button type="button" class="city-tag-btn" id="regionBtn-north" onclick="app.setRegionFilter('NORTH')">🏙️ 北部精選 (雙北/桃竹)</button>
+                    <button type="button" class="city-tag-btn" id="regionBtn-central" onclick="app.setRegionFilter('CENTRAL')">🌲 中部渡假 (台中/南投)</button>
+                    <button type="button" class="city-tag-btn" id="regionBtn-south" onclick="app.setRegionFilter('SOUTH')">☀️ 南部熱情 (台南/高屏)</button>
+                    <button type="button" class="city-tag-btn" id="regionBtn-east" onclick="app.setRegionFilter('EAST')">🌊 東部野奢 (宜花東)</button>
+                    <button type="button" class="city-tag-btn" id="regionBtn-islands" onclick="app.setRegionFilter('ISLANDS')">🏖️ 離島秘境 (澎金馬)</button>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div style="background: white; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                    <div style="flex: 2; min-width: 220px;">
+                        <input type="text" id="roomSearchKeyword" class="form-control" placeholder="🔍 搜尋房型名稱、城市或設施（如：浴缸、露台、溫泉）..." oninput="app.filterRooms()">
+                    </div>
+                    <div style="flex: 1; min-width: 140px;">
+                        <select id="roomFilterCity" class="form-control" onchange="app.filterRooms()">
+                            <option value="">📍 全部城市</option>
+                            <option value="台北市">台北市</option>
+                            <option value="新北市">新北市</option>
+                            <option value="台中市">台中市</option>
+                            <option value="南投縣">南投縣 (日月潭)</option>
+                            <option value="台南市">台南市</option>
+                            <option value="高雄市">高雄市</option>
+                            <option value="屏東縣">屏東縣 (墾丁)</option>
+                            <option value="宜蘭縣">宜蘭縣 (礁溪)</option>
+                            <option value="花蓮縣">花蓮縣 (太魯閣)</option>
+                            <option value="台東縣">台東縣 (知本)</option>
+                            <option value="澎湖縣">澎湖縣</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 140px;">
+                        <select id="roomFilterType" class="form-control" onchange="app.filterRooms()">
+                            <option value="">🏨 全部房型規格</option>
+                            <option value="海景尊爵套房">海景尊爵套房</option>
+                            <option value="頂級溫泉Villa">頂級溫泉Villa</option>
+                            <option value="景觀家庭房">景觀家庭房</option>
+                            <option value="奢華蜜月套房">奢華蜜月套房</option>
+                            <option value="經典雙人客房">經典雙人客房</option>
+                            <option value="野奢露營Villa">野奢露營Villa</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 130px;">
+                        <select id="roomFilterCapacity" class="form-control" onchange="app.filterRooms()">
+                            <option value="0">👥 容納人數不限</option>
+                            <option value="2">2 位貴賓</option>
+                            <option value="4">4 位貴賓</option>
+                            <option value="6">6 位以上貴賓</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 140px;">
+                        <select id="roomSortOrder" class="form-control" onchange="app.filterRooms()">
+                            <option value="default">⇅ 預設熱門推薦</option>
+                            <option value="price_asc">💰 價格：由低至高</option>
+                            <option value="price_desc">💎 價格：由高至低</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Room Grid -->
                 <div class="room-grid" id="roomsListContainer">
+                    <!-- Dynamic Rooms Injected -->
+                </div>
+            </section>
+
+            <!-- ==================== VIEW 2: 🛍️ 電商購物商城 (Shop View) ==================== -->
+            <section id="shopView" class="view-section d-none">
+                <!-- Shop Header Banner -->
+                <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 40px 32px; border-radius: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(236, 72, 153, 0.2); color: #f472b6; padding: 4px 12px; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; margin-bottom: 10px;">
+                            <span>🔥 全通路正品保證 • MOMO & 蝦皮旗艦同步直營</span>
+                        </div>
+                        <h2 style="font-size: 2rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">🛍️ Grand Luxury 尊榮電商購物商城</h2>
+                        <p style="color: #94a3b8; font-size: 0.95rem; margin: 0;">匯集頂級 3C 數位、流行精品、美妝保養、生活家電與產地直達頂級美味，滿 NT$ 1,500 即享黑貓免運直送</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); padding: 12px 20px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 0.8rem; color: #94a3b8;">在售精選商品</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: #38bdf8;" id="spaStatProductCount">30+ 款</div>
+                        </div>
+                        <button class="btn btn-primary" style="padding: 12px 20px; font-size: 1rem; border-radius: 10px;" onclick="app.openShopCartModal()">
+                            <i class="fa-solid fa-cart-shopping"></i> 查看購物車
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Shop Category Navigation Pills -->
+                <div id="spaCategoryPillsContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <div class="cat-pill active" id="spaShopCat-all" onclick="app.filterShopCategory('ALL')">🛍️ 全部商品</div>
+                    <div class="cat-pill" id="spaShopCat-3c" onclick="app.filterShopCategory('📱 3C 數位旗艦')">📱 3C 數位旗艦</div>
+                    <div class="cat-pill" id="spaShopCat-fashion" onclick="app.filterShopCategory('👗 日韓流行服飾')">👗 日韓流行服飾</div>
+                    <div class="cat-pill" id="spaShopCat-beauty" onclick="app.filterShopCategory('💄 專櫃美妝保養')">💄 專櫃美妝保養</div>
+                    <div class="cat-pill" id="spaShopCat-appliances" onclick="app.filterShopCategory('🏠 智能生活家電')">🏠 智能生活家電</div>
+                    <div class="cat-pill" id="spaShopCat-gourmet" onclick="app.filterShopCategory('🍷 產地頂級美味')">🍷 產地頂級美味</div>
+                </div>
+
+                <!-- Shop Search & Filter Toolbar -->
+                <div style="background: white; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                    <div style="flex: 2; min-width: 240px;">
+                        <input type="text" id="spaShopSearchInput" class="form-control" placeholder="🔍 搜尋 MOMO / 蝦皮 熱銷商品名稱、品牌或關鍵字..." oninput="app.filterShopProducts()">
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <select id="spaShopSortSelect" class="form-control" onchange="app.filterShopProducts()">
+                            <option value="default">⇅ 預設熱門推薦</option>
+                            <option value="price_asc">💰 價格：由低至高</option>
+                            <option value="price_desc">💎 價格：由高至低</option>
+                            <option value="rating">⭐ 最高評價推薦</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 140px;">
+                        <select id="spaShopSourceFilter" class="form-control" onchange="app.filterShopProducts()">
+                            <option value="ALL">🌐 全部通路來源</option>
+                            <option value="MOMO">MOMO 購物網</option>
+                            <option value="SHOPEE">蝦皮購物旗艦</option>
+                            <option value="GLOBAL">國際熱門選物</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Shop Product Grid -->
+                <div class="product-grid" id="spaProductGrid">
+                    <!-- Dynamic Products Injected -->
+                </div>
+            </section>
+
+            <!-- ==================== VIEW 3: 🍽️ 精緻美饌預約 (Dining View) ==================== -->
+            <section id="diningView" class="view-section d-none">
+                <div class="hero-banner" style="background: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.78)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600') center/cover no-repeat;">
+                    <h1>🍽️ 米其林星級饗宴與精緻美饌預約</h1>
+                    <p>主廚特選頂級和牛、極鮮現流懷石料理、景觀鐵板燒與奢華下午茶，尊享私人包廂專屬款待</p>
+                </div>
+
+                <div class="city-tags-wrapper">
+                    <button type="button" class="city-tag-btn active" id="diningCat-all" onclick="app.filterDining('ALL')">🍴 全部精選美饌</button>
+                    <button type="button" class="city-tag-btn" id="diningCat-michelin" onclick="app.filterDining('米其林星級')">⭐ 米其林星級</button>
+                    <button type="button" class="city-tag-btn" id="diningCat-kaiseki" onclick="app.filterDining('頂級懷石')">🍱 頂級懷石料理</button>
+                    <button type="button" class="city-tag-btn" id="diningCat-steak" onclick="app.filterDining('熟成牛排')">🥩 頂級熟成牛排</button>
+                    <button type="button" class="city-tag-btn" id="diningCat-teppan" onclick="app.filterDining('景觀鐵板燒')">🔥 景觀鐵板燒</button>
+                    <button type="button" class="city-tag-btn" id="diningCat-italian" onclick="app.filterDining('義法美饌')">🍷 義法美饌餐酒</button>
+                    <button type="button" class="city-tag-btn" id="diningCat-afternoon" onclick="app.filterDining('奢華下午茶')">🫖 奢華景觀下午茶</button>
+                </div>
+
+                <div class="dining-grid" id="diningListContainer">
                     <!-- Populated via JS -->
                 </div>
             </section>
 
-            <!-- 2. 獨立會員註冊頁面 View (Register Page) -->
-            <section id="registerView" class="view-section d-none">
-                <div class="content-header">
-                    <h2>📝 新會員註冊 (Member Registration)</h2>
+            <!-- ==================== VIEW 4: 🎟️ 休閒體驗票券 (Tickets View) ==================== -->
+            <section id="ticketsView" class="view-section d-none">
+                <div class="hero-banner" style="background: linear-gradient(rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.78)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600') center/cover no-repeat;">
+                    <h1>🎟️ 探索極致休閒渡假與尊榮體驗票券</h1>
+                    <p>私人奢華遊艇出海、頂級景觀溫泉大眾湯券、名廚手作料理體驗與主題樂園快速通關，即買即用憑 QR Code 核銷</p>
                 </div>
-                <div style="background: white; padding: 32px; border-radius: 12px; border: 1px solid #e2e8f0; max-width: 680px; box-shadow: var(--box-shadow); margin: 0 auto;">
-                    <div style="text-align: center; margin-bottom: 24px;">
-                        <span style="font-size: 2.5rem;">🏨</span>
-                        <h3 style="font-size: 1.4rem; color: #1e293b; margin-top: 8px;">加入 Grand Luxury 尊榮會員</h3>
-                        <p style="color: #64748b; font-size: 0.9rem; margin-top: 4px;">註冊即可享有專屬訂房優惠、即時 Email 訂單通知與 2FA 安全防護</p>
-                    </div>
 
-                    <form onsubmit="app.handlePageRegister(event)">
-                        <!-- 身分選擇 (預設一般使用者，選擇管理者需輸入特殊字) -->
-                        <div class="form-group" style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 18px;">
-                            <label style="font-weight: 600; color: #1e293b; margin-bottom: 8px; display: block;">🎯 註冊身分類型</label>
-                            <div style="display: flex; gap: 24px; align-items: center;">
-                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 500;">
-                                    <input type="radio" name="regRole" value="ROLE_USER" checked onchange="app.toggleAdminKeyField()">
-                                    <span>👤 一般貴賓會員 (預設)</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 500;">
-                                    <input type="radio" name="regRole" value="ROLE_ADMIN" onchange="app.toggleAdminKeyField()">
-                                    <span>🛡️ 系統管理者 (需暗號)</span>
-                                </label>
-                            </div>
-                        </div>
+                <div class="city-tags-wrapper">
+                    <button type="button" class="city-tag-btn active" id="ticketCat-all" onclick="app.filterTickets('ALL')">🎫 全部體驗票券</button>
+                    <button type="button" class="city-tag-btn" id="ticketCat-hotspring" onclick="app.filterTickets('頂級溫泉')">♨️ 頂級景觀溫泉</button>
+                    <button type="button" class="city-tag-btn" id="ticketCat-yacht" onclick="app.filterTickets('奢華遊艇')">🛥️ 奢華遊艇出海</button>
+                    <button type="button" class="city-tag-btn" id="ticketCat-tour" onclick="app.filterTickets('觀景導覽')">🌄 私人景觀導覽</button>
+                    <button type="button" class="city-tag-btn" id="ticketCat-park" onclick="app.filterTickets('樂園通關')">🎡 樂園快速通關</button>
+                    <button type="button" class="city-tag-btn" id="ticketCat-chef" onclick="app.filterTickets('名廚手作')">👨‍🍳 星級名廚手作</button>
+                    <button type="button" class="city-tag-btn" id="ticketCat-glamping" onclick="app.filterTickets('戶外野奢')">🏕️ 頂級戶外野奢</button>
+                </div>
 
-                        <!-- 管理者特殊字/金鑰輸入框 (切換為管理者時展開) -->
-                        <div class="form-group d-none" id="adminSecretKeyGroup" style="background: #eff6ff; padding: 14px; border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 18px;">
-                            <label style="color: #1d4ed8; font-weight: 600;">🔑 管理者專屬特殊驗證暗號 <span style="color: red;">*</span></label>
-                            <input type="password" id="pageRegAdminSecretKey" class="form-control" placeholder="請輸入管理者專屬特殊字 (例如: hk4g4hk4g4)" style="border-color: #93c5fd;">
-                            <small style="color: #2563eb; display: block; margin-top: 4px;">⚠️ 只有具備授權特殊字暗號的使用者，才可成功註冊並取得管理權限。</small>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                            <div class="form-group">
-                                <label>使用者帳號 <span style="color: red;">*</span></label>
-                                <input type="text" id="pageRegUsername" class="form-control" required placeholder="請設定 4~20 位英數字帳號" minlength="4">
-                            </div>
-                            <div class="form-group">
-                                <label>電子郵件 (收取確認信) <span style="color: red;">*</span></label>
-                                <input type="email" id="pageRegEmail" class="form-control" required placeholder="例如: yourname@gmail.com">
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                            <div class="form-group">
-                                <label>設定登入密碼 <span style="color: red;">*</span></label>
-                                <input type="password" id="pageRegPassword" class="form-control" required minlength="6" placeholder="至少 6 位字元" oninput="app.checkPasswordMatch()">
-                            </div>
-                            <div class="form-group">
-                                <label>確認登入密碼 <span style="color: red;">*</span></label>
-                                <input type="password" id="pageRegPasswordConfirm" class="form-control" required minlength="6" placeholder="再次輸入密碼" oninput="app.checkPasswordMatch()">
-                                <small id="pwdMatchMsg" style="display: block; margin-top: 4px; font-size: 0.8rem;"></small>
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                            <div class="form-group">
-                                <label>真實姓名</label>
-                                <input type="text" id="pageRegFullName" class="form-control" placeholder="例如：王小明">
-                            </div>
-                            <div class="form-group">
-                                <label>聯絡電話</label>
-                                <input type="text" id="pageRegPhone" class="form-control" placeholder="例如：0912-345-678">
-                            </div>
-                        </div>
-
-                        <div class="form-group" style="margin: 16px 0;">
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 0.9rem; cursor: pointer;">
-                                <input type="checkbox" id="pageRegTerms" required checked>
-                                我已閱讀並同意 <span style="color: #2563eb; text-decoration: underline;">會員服務條款</span> 與 <span style="color: #2563eb; text-decoration: underline;">隱私權政策</span>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 8px;">
-                            ✨ 立即完成註冊並登入
-                        </button>
-                    </form>
-
-                    <div class="oauth-divider">其他快速選項</div>
-
-                    <div style="display: flex; gap: 12px; justify-content: center; margin-top: 12px;">
-                        <button type="button" class="btn btn-outline" style="flex: 1;" onclick="app.showModal('loginModal')">
-                            已有帳號？立即登入
-                        </button>
-                        <button type="button" class="btn btn-guest" style="flex: 1;" onclick="app.handleGuestLogin()">
-                            👤 訪客體驗免註冊
-                        </button>
-                    </div>
+                <div class="ticket-grid" id="ticketsListContainer">
+                    <!-- Populated via JS -->
                 </div>
             </section>
 
-            <!-- 3. 我的預訂紀錄 View (一般使用者不可改狀態，僅查看) -->
+            <!-- ==================== VIEW 5: 我的預訂與訂單 (My Bookings View) ==================== -->
             <section id="myBookingsView" class="view-section d-none">
-                <div class="content-header" style="justify-content: space-between; align-items: center;">
+                <div class="content-header" style="margin-bottom: 16px;">
                     <div>
-                        <h2>我的預訂紀錄 (My Bookings)</h2>
-                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">檢視您在 Grand Luxury 的所有訂房預約與即時進度狀態</p>
+                        <h2>📅 我的尊榮行程與預訂紀錄 (My Bookings & Orders)</h2>
+                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">在此集中管理您的住宿預訂、米其林美饌席位與休閒體驗票券憑證</p>
                     </div>
-                    <button class="btn btn-primary" onclick="app.switchView('roomsView')">＋ 預訂新房型</button>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>訂單編號</th>
-                                <th>房型</th>
-                                <th>入住日期</th>
-                                <th>退房日期</th>
-                                <th>總額</th>
-                                <th>訂單狀態</th>
-                                <th>備註</th>
-                            </tr>
-                        </thead>
-                        <tbody id="myBookingsTableBody">
-                            <!-- Populated via JS -->
-                        </tbody>
-                    </table>
+
+                <!-- Sub Navigation Tabs -->
+                <div style="display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;">
+                    <button type="button" class="sub-tab-btn active" id="subTab-rooms" onclick="app.switchMyBookingsTab('rooms')">🏨 住宿預訂紀錄</button>
+                    <button type="button" class="sub-tab-btn" id="subTab-dining" onclick="app.switchMyBookingsTab('dining')">🍽️ 美饌預約席位</button>
+                    <button type="button" class="sub-tab-btn" id="subTab-tickets" onclick="app.switchMyBookingsTab('tickets')">🎟️ 休閒體驗票券 (QR Code)</button>
+                </div>
+
+                <!-- Sub-tab 1: Rooms Content -->
+                <div id="myBookings-rooms-content">
+                    <div class="table-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>預訂房型</th>
+                                    <th>入住 / 退房日期</th>
+                                    <th>天數 / 總金額</th>
+                                    <th>訂單狀態</th>
+                                    <th>預訂時間</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myBookingsTableBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sub-tab 2: Dining Content -->
+                <div id="myBookings-dining-content" class="d-none">
+                    <div class="table-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>預約編號</th>
+                                    <th>餐廳名稱</th>
+                                    <th>預約日期</th>
+                                    <th>用餐時段</th>
+                                    <th>人數</th>
+                                    <th>席位狀態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myDiningTableBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sub-tab 3: Tickets Content -->
+                <div id="myBookings-tickets-content" class="d-none">
+                    <div class="table-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>體驗票券名稱</th>
+                                    <th>張數</th>
+                                    <th>結帳金額</th>
+                                    <th>持票人姓名</th>
+                                    <th>票券狀態</th>
+                                    <th>核銷憑證</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTicketsTableBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
-            <!-- 4. 個人帳號與 2FA View (帳號資料管理 & 訂單快速捷徑) -->
+            <!-- ==================== VIEW 6: 會員個人資料 & 2FA (Profile View) ==================== -->
             <section id="profileView" class="view-section d-none">
-                <div class="content-header">
-                    <h2>個人帳號管理 (Profile &amp; 2FA)</h2>
+                <div class="content-header" style="margin-bottom: 24px;">
+                    <div>
+                        <h2>👤 會員中心與帳號資安設定 (Profile & Security)</h2>
+                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">管理您的個人聯絡資訊、登入密碼以及 Google Authenticator 2FA 雙步驟防護</p>
+                    </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; max-width: 960px;">
-                    <!-- 帳號資料表單 -->
-                    <div style="background: white; padding: 24px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <h3 style="font-size: 1.1rem; color: #1e293b; margin-bottom: 16px;">📝 基本資料維護</h3>
-                        <form onsubmit="app.handleUpdateProfile(event)">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+                    <!-- Card 1: 基本資料修改 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">📝 基本個人資料</h3>
+                        </div>
+                        <div class="card-body">
+                            <form onsubmit="app.handleProfileUpdate(event)">
+                                <div class="form-group">
+                                    <label>帳號名稱 (Username)</label>
+                                    <input type="text" id="profileUsername" class="form-control" disabled style="background:#f1f5f9;">
+                                </div>
+                                <div class="form-group">
+                                    <label>電子郵件 (Email)</label>
+                                    <input type="email" id="profileEmail" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>貴賓真實姓名</label>
+                                    <input type="text" id="profileFullName" class="form-control" placeholder="請輸入姓名">
+                                </div>
+                                <div class="form-group">
+                                    <label>聯絡電話</label>
+                                    <input type="text" id="profilePhone" class="form-control" placeholder="如: 0912-345-678">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">儲存修改資料</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: 2FA 雙步驟驗證與密碼安全 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">🛡️ 帳號資安與 2FA 設定</h3>
+                        </div>
+                        <div class="card-body">
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong style="font-size: 1rem; color: #0f172a;">Google Authenticator 2FA</strong>
+                                        <div style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">登入時需提供 6 位數一次性動態安全碼</div>
+                                    </div>
+                                    <span id="profile2faStatusBadge" class="badge badge-pending">未啟用</span>
+                                </div>
+                                <div style="margin-top: 14px;" id="profile2faActions">
+                                    <button type="button" id="btnEnable2FA" class="btn btn-primary btn-sm" onclick="app.show2FASetupModal()">設定並啟用 2FA</button>
+                                    <button type="button" id="btnDisable2FA" class="btn btn-danger btn-sm d-none" onclick="app.disable2FA()">關閉 2FA 保護</button>
+                                </div>
+                            </div>
+
+                            <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 12px;">🔑 修改登入密碼</h4>
+                            <form onsubmit="app.handleChangePassword(event)">
+                                <div class="form-group">
+                                    <label>原密碼</label>
+                                    <input type="password" id="oldPasswordInput" class="form-control" required placeholder="請輸入目前密碼">
+                                </div>
+                                <div class="form-group">
+                                    <label>新密碼</label>
+                                    <input type="password" id="newPasswordInput" class="form-control" required placeholder="至少 6 位數新密碼">
+                                </div>
+                                <button type="submit" class="btn btn-outline btn-block">變更密碼</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== VIEW 7: 新會員完整註冊頁 ==================== -->
+            <section id="registerView" class="view-section d-none">
+                <div class="card" style="max-width: 580px; margin: 0 auto;">
+                    <div class="card-header" style="text-align: center;">
+                        <h2 style="font-size: 1.5rem; color: #0f172a;">✨ 註冊 Grand Luxury 尊榮會員</h2>
+                        <p style="color: #64748b; font-size: 0.9rem; margin-top: 4px;">立即加入享受頂級住宿預訂優惠、即時確認信與專屬客服款待</p>
+                    </div>
+                    <div class="card-body">
+                        <form onsubmit="app.handlePageRegister(event)">
                             <div class="form-group">
-                                <label>使用者帳號 (不可更改)</label>
-                                <input type="text" id="profileUsername" class="form-control" disabled>
+                                <label>帳號名稱 (Username) <span style="color: red;">*</span></label>
+                                <input type="text" id="pageRegUsername" class="form-control" required placeholder="請輸入帳號名稱">
                             </div>
                             <div class="form-group">
-                                <label>電子郵件 (Email)</label>
-                                <input type="email" id="profileEmail" class="form-control" disabled>
+                                <label>電子郵件 (Email) <span style="color: red;">*</span></label>
+                                <input type="email" id="pageRegEmail" class="form-control" required placeholder="name@example.com">
                             </div>
-                            <div class="form-group">
-                                <label>姓名</label>
-                                <input type="text" id="profileFullName" class="form-control">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label>登入密碼 <span style="color: red;">*</span></label>
+                                    <input type="password" id="pageRegPassword" class="form-control" required placeholder="至少 6 碼" oninput="app.checkPasswordMatch()">
+                                </div>
+                                <div class="form-group">
+                                    <label>確認密碼 <span style="color: red;">*</span></label>
+                                    <input type="password" id="pageRegPasswordConfirm" class="form-control" required placeholder="再次輸入密碼" oninput="app.checkPasswordMatch()">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>聯絡電話</label>
-                                <input type="text" id="profilePhone" class="form-control">
+                            <div id="pwdMatchMsg" style="font-size: 0.8rem; margin-bottom: 12px;"></div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label>真實姓名</label>
+                                    <input type="text" id="pageRegFullName" class="form-control" placeholder="王大明">
+                                </div>
+                                <div class="form-group">
+                                    <label>聯絡電話</label>
+                                    <input type="text" id="pageRegPhone" class="form-control" placeholder="0912-345-678">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>重設新密碼 (若不修改請留空)</label>
-                                <input type="password" id="profileNewPassword" class="form-control" placeholder="輸入新密碼">
+
+                            <div class="form-group" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 14px;">
+                                <label style="font-weight: 600; color: #1e293b; margin-bottom: 6px; display: block;">🎯 註冊身份選擇</label>
+                                <div style="display: flex; gap: 20px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                        <input type="radio" name="regRole" value="ROLE_USER" checked onchange="app.toggleAdminKeyField()"> 👤 一般貴賓會員
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                        <input type="radio" name="regRole" value="ROLE_ADMIN" onchange="app.toggleAdminKeyField()"> 🛡️ 系統管理者 (需暗號)
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>使用者角色權限</label>
-                                <p id="profileRoles" style="font-weight: bold; color: #2563eb; margin: 4px 0;"></p>
+
+                            <div class="form-group d-none" id="adminSecretKeyGroup" style="background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 14px;">
+                                <label style="color: #1d4ed8; font-weight: 600;">🔑 管理者專屬特殊驗證暗號 <span style="color: red;">*</span></label>
+                                <input type="password" id="pageRegAdminSecretKey" class="form-control" placeholder="請輸入管理者暗號 (hk4g4hk4g4)">
                             </div>
-                            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">儲存個人設定</button>
+
+                            <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem;">
+                                ✨ 確認註冊並登入
+                            </button>
                         </form>
                     </div>
-
-                    <!-- 快速捷徑與安全設定 -->
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        <!-- 訂單管理捷徑 -->
-                        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <h3 style="font-size: 1.05rem; color: #1e293b; margin-bottom: 12px;">📑 訂單快捷管理</h3>
-                            <p style="color: #64748b; font-size: 0.85rem; line-height: 1.5; margin-bottom: 14px;">
-                                您可以直接由此處前往檢視個人所有的訂房紀錄與狀態。
-                            </p>
-                            <button class="btn btn-primary btn-block" onclick="app.switchView('myBookingsView')">
-                                📅 查看我的所有預訂
-                            </button>
-                            <div class="admin-only d-none" style="margin-top: 8px;">
-                                <button class="btn btn-outline btn-block" onclick="app.switchView('adminBookingsView')">
-                                    📊 全館所有訂單管理 (管理員)
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 2FA 安全設定 -->
-                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <h3 style="font-size: 1.05rem; color: #1e293b; margin-bottom: 8px;">🔐 Google Authenticator 2FA</h3>
-                            <p style="font-size: 0.9rem; margin-bottom: 12px;">狀態: <span id="profile2FAStatus"></span></p>
-                            <div>
-                                <button type="button" id="setup2FABtn" class="btn btn-sm btn-primary" onclick="app.setup2FA()">綁定並啟用 2FA</button>
-                                <button type="button" id="disable2FABtn" class="btn btn-sm btn-danger d-none" onclick="app.disable2FA()">停用 2FA</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
-            <!-- 5. 管理者專區：房型管理 -->
+            <!-- ==================== VIEW 8: 後台房型管理 (Admin Rooms) ==================== -->
             <section id="adminRoomsView" class="view-section admin-only d-none">
-                <div class="content-header">
-                    <h2>房型管理 (支援多圖片/CRUD)</h2>
-                    <button class="btn btn-primary" onclick="app.showAddRoomModal()">＋ 新增房型</button>
+                <div class="content-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div>
+                        <h2>🛡️ 全館房型管理 (Admin Room Management)</h2>
+                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">管理者可在此新增、編輯、設定上架狀態與房型照片清單</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="app.openRoomEditModal(null)">
+                        <i class="fa-solid fa-plus"></i> 新增全新房型
+                    </button>
                 </div>
-                <div class="table-container">
-                    <table>
+
+                <div class="table-card">
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>照片</th>
+                                <th>城市</th>
                                 <th>房型名稱</th>
-                                <th>房型類別</th>
+                                <th>規格</th>
                                 <th>每晚價格</th>
                                 <th>容納人數</th>
-                                <th>圖片數</th>
+                                <th>狀態</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -283,21 +540,27 @@
                 </div>
             </section>
 
-            <!-- 6. 管理者專區：使用者管理 (非管理者) -->
+            <!-- ==================== VIEW 9: 後台使用者管理 (Admin Users) ==================== -->
             <section id="adminUsersView" class="view-section admin-only d-none">
-                <div class="content-header">
-                    <h2>使用者管理 (管理者可維護非管理者資訊)</h2>
+                <div class="content-header" style="margin-bottom: 24px;">
+                    <div>
+                        <h2>👥 全體會員帳號管理 (Admin User Management)</h2>
+                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">管理全平台註冊使用者、權限角色切換 (ROLE_ADMIN / ROLE_USER) 與 2FA 狀態</p>
+                    </div>
                 </div>
-                <div class="table-container">
-                    <table>
+
+                <div class="table-card">
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>帳號</th>
-                                <th>Email</th>
+                                <th>帳號名稱</th>
                                 <th>姓名</th>
+                                <th>電子信箱</th>
                                 <th>電話</th>
-                                <th>2FA 狀態</th>
+                                <th>角色權限</th>
+                                <th>2FA 安全</th>
+                                <th>註冊時間</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -308,53 +571,103 @@
                 </div>
             </section>
 
-            <!-- 7. 管理者專區：全館訂單總覽與狀態維護 (管理者專屬狀態修改) -->
+            <!-- ==================== VIEW 10: 後台營運與多服務訂單總覽 (Admin Bookings) ==================== -->
             <section id="adminBookingsView" class="view-section admin-only d-none">
-                <div class="content-header" style="flex-direction: column; align-items: flex-start; gap: 14px;">
-                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h2>全館訂單總覽與狀態管理 (All Bookings Management)</h2>
-                            <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">
-                                🛡️ 管理者權限專區：可即時管理並修改訂單狀態（下單成功未付款、下單成功已付款、已入住、已退房、已退款、已取消）。
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 訂單搜尋與狀態篩選 -->
-                    <div style="width: 100%; display: flex; gap: 12px; flex-wrap: wrap; background: white; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <div style="flex: 2; min-width: 220px;">
-                            <input type="text" id="adminBookingSearchKeyword" class="form-control" placeholder="🔍 搜尋訂單編號、會員姓名、信箱或房型..." oninput="app.filterAdminBookings()">
-                        </div>
-                        <div style="flex: 1; min-width: 180px;">
-                            <select id="adminBookingStatusFilter" class="form-control" onchange="app.filterAdminBookings()">
-                                <option value="">📌 全部訂單狀態</option>
-                                <option value="PENDING_PAYMENT">⏳ 下單成功未付款</option>
-                                <option value="PAID">💳 下單成功已付款 (金流)</option>
-                                <option value="CHECKED_IN">🏨 已入住 (管理者可改)</option>
-                                <option value="CHECKED_OUT">🚪 已退房 (管理者可改)</option>
-                                <option value="REFUNDED">↩️ 已退款 (金流)</option>
-                                <option value="CANCELLED">🔴 已取消</option>
-                            </select>
-                        </div>
+                <div class="content-header" style="margin-bottom: 24px;">
+                    <div>
+                        <h2>📊 營運數據與跨服務訂單總覽 (Admin Overview & Orders)</h2>
+                        <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">即時營運營收統計與全通路訂單狀態審核</p>
                     </div>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>訂單編號</th>
-                                <th>會員帳號 / 信箱</th>
-                                <th>房型名稱</th>
-                                <th>預約期間</th>
-                                <th>總額</th>
-                                <th>目前狀態</th>
-                                <th>變更訂單狀態 (管理者專屬)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminBookingsTableBody">
-                            <!-- Populated via JS -->
-                        </tbody>
-                    </table>
+
+                <!-- KPI Cards -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">全平台總營收</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #1e3a8a; margin-top: 6px;" id="kpiTotalRevenue">NT$ 0</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">客房住宿預訂數</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #065f46; margin-top: 6px;" id="kpiTotalRooms">0 筆</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">美饌席位預約數</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #92400e; margin-top: 6px;" id="kpiTotalDining">0 筆</div>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #8b5cf6; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">體驗票券訂單數</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #5b21b6; margin-top: 6px;" id="kpiTotalTickets">0 筆</div>
+                    </div>
+                </div>
+
+                <!-- Admin Orders Sub-Tabs -->
+                <div style="display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;">
+                    <button type="button" class="sub-tab-btn active" id="adminSubTab-rooms" onclick="app.switchAdminOrdersTab('rooms')">🏨 住宿訂單審核</button>
+                    <button type="button" class="sub-tab-btn" id="adminSubTab-dining" onclick="app.switchAdminOrdersTab('dining')">🍽️ 美饌預約總覽</button>
+                    <button type="button" class="sub-tab-btn" id="adminSubTab-tickets" onclick="app.switchAdminOrdersTab('tickets')">🎟️ 體驗票券核銷總覽</button>
+                </div>
+
+                <div id="adminOrders-rooms-content">
+                    <div class="table-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>預訂會員</th>
+                                    <th>房型</th>
+                                    <th>預訂日期</th>
+                                    <th>金額</th>
+                                    <th>狀態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminBookingsTableBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="adminOrders-dining-content" class="d-none">
+                    <div class="table-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>預約編號</th>
+                                    <th>貴賓資訊</th>
+                                    <th>預約餐廳</th>
+                                    <th>日期 / 時段</th>
+                                    <th>人數</th>
+                                    <th>狀態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminDiningTableBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="adminOrders-tickets-content" class="d-none">
+                    <div class="table-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>購票貴賓</th>
+                                    <th>票券名稱</th>
+                                    <th>數量 / 金額</th>
+                                    <th>核銷碼 (QR)</th>
+                                    <th>狀態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTicketsTableBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -364,307 +677,586 @@
     <!-- Dynamic Footer Component -->
     <div id="footer-placeholder"></div>
 
-    <!-- === Modals === -->
+    <!-- ==================== MODALS POPUPS ==================== -->
 
-    <!-- 1. 會員登入 Modal (包含訪客登入、Google Mail OTP、Google 授權跳轉、LINE 掃碼) -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
+    <!-- 1. 登入 Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="max-width: 440px;">
             <div class="modal-header">
-                <h3>會員登入</h3>
+                <h3>🔑 尊榮會員登入</h3>
                 <button class="modal-close" onclick="app.closeModal('loginModal')">&times;</button>
             </div>
+            <div class="modal-body">
+                <form onsubmit="app.handleLogin(event)">
+                    <div class="form-group">
+                        <label>帳號或 Email</label>
+                        <input type="text" id="loginUsername" class="form-control" required placeholder="請輸入帳號或電子郵件">
+                    </div>
+                    <div class="form-group">
+                        <label>密碼</label>
+                        <input type="password" id="loginPassword" class="form-control" required placeholder="請輸入密碼">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 10px; font-size: 1rem;">登入</button>
+                </form>
 
-            <!-- 訪客體驗快速按鈕 -->
-            <div style="margin-bottom: 16px;">
-                <button type="button" class="btn btn-guest btn-block" onclick="app.handleGuestLogin()">
-                    👤 訪客快速登入 (免註冊直接體驗與訂房)
-                </button>
-            </div>
+                <div class="oauth-divider">快速登入選項</div>
 
-            <div class="oauth-divider">或使用帳號密碼登入</div>
-
-            <form onsubmit="app.handleLogin(event)">
-                <div class="form-group">
-                    <label>帳號或 Email</label>
-                    <input type="text" id="loginUsername" class="form-control" required placeholder="例如: testuser 或 admin">
-                </div>
-                <div class="form-group">
-                    <label>密碼</label>
-                    <input type="password" id="loginPassword" class="form-control" required placeholder="請輸入密碼">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">登入帳號</button>
-            </form>
-
-            <div style="text-align: center; margin-top: 12px;">
-                <span style="font-size: 0.9rem; color: #64748b;">還沒有會員帳號？</span>
-                <a href="javascript:void(0)" onclick="app.closeModal('loginModal'); app.switchView('registerView')" style="color: #2563eb; font-weight: 600; text-decoration: none; margin-left: 4px;">立即免費註冊</a>
-            </div>
-
-            <div class="oauth-divider">或使用快速驗證與社群登入</div>
-
-            <div class="social-login-group">
-                <!-- Google Mail 發送驗證碼登入 -->
-                <button type="button" class="btn btn-outline" style="border-color: #ea4335; color: #ea4335; font-weight: 600;" onclick="app.showGoogleMailOtpModal()">
-                    ✉️ 透過 Google Mail 發送驗證碼登入
-                </button>
-                <button type="button" class="btn btn-google" onclick="app.handleGoogleOAuthLogin()">
-                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-                    轉跳 Google 帳號授權登入
-                </button>
-                <button type="button" class="btn btn-line" onclick="app.showLineQrCodeModal()">
-                    💬 LINE 掃描 QR Code 安全登入
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. Google Mail 6 位數驗證碼登入專用 Modal -->
-    <div class="modal" id="googleMailOtpModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>✉️ Google Mail 驗證碼登入</h3>
-                <button class="modal-close" onclick="app.closeModal('googleMailOtpModal')">&times;</button>
-            </div>
-            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 16px;">
-                輸入您的 Google Mail (Gmail) 信箱，系統將發送 6 位數驗證碼至您的信箱，輸入後即可免密碼安全登入！
-            </p>
-
-            <div class="form-group">
-                <label>Google Mail 電子信箱</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="email" id="otpEmailInput" class="form-control" placeholder="例如: yourname@gmail.com" required>
-                    <button type="button" class="btn btn-primary" id="btnSendOtp" onclick="app.handleSendGoogleMailOtp()" style="white-space: nowrap;">
-                        發送驗證碼
+                <div class="oauth-button-grid">
+                    <button type="button" class="btn-oauth btn-oauth-google" onclick="app.handleGoogleOAuthLogin()">
+                        <i class="fa-brands fa-google"></i> Google 登入
+                    </button>
+                    <button type="button" class="btn-oauth btn-oauth-line" onclick="app.showLineQrCodeModal()">
+                        <i class="fa-brands fa-line"></i> LINE 掃碼
                     </button>
                 </div>
-            </div>
 
-            <form onsubmit="app.handleVerifyGoogleMailOtp(event)" id="otpVerifyForm" style="margin-top: 16px;">
-                <div class="form-group">
-                    <label>請輸入信箱收到的 6 位數驗證碼</label>
-                    <input type="text" id="otpCodeInput" class="form-control" required placeholder="例如: 849201" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 4px;">
-                    <small id="otpStatusMsg" style="display: block; margin-top: 6px; color: #2563eb;"></small>
+                <div style="margin-top: 12px; text-align: center;">
+                    <a href="javascript:void(0)" onclick="app.showGoogleMailOtpModal()" style="font-size: 0.85rem; color: #2563eb; text-decoration: none;">
+                        📧 使用 Google Mail 免密碼 6 位數 OTP 登入
+                    </a>
                 </div>
-                <button type="submit" class="btn btn-success btn-block" style="padding: 12px; font-size: 1rem;">
-                    🚀 驗證並登入系統
-                </button>
-            </form>
+
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed #e2e8f0; font-size: 0.8rem; color: #64748b; text-align: center;">
+                    快速測試帳號：<br>
+                    <a href="javascript:void(0)" onclick="app.quickFillLogin('admin', 'admin123')" style="color:#2563eb; font-weight: bold;">[管理員: admin / admin123]</a> |
+                    <a href="javascript:void(0)" onclick="app.quickFillLogin('user', 'user123')" style="color:#2563eb; font-weight: bold;">[會員: user / user123]</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- 3. LINE 掃碼登入專用 Modal (出 QRCode 給使用者掃 + 即時狀態輪詢) -->
-    <div class="modal" id="lineQrModal">
-        <div class="modal-content">
+    <!-- 2. Google Mail OTP 登入 Modal -->
+    <div id="googleMailOtpModal" class="modal">
+        <div class="modal-content" style="max-width: 440px;">
             <div class="modal-header">
-                <h3>💬 LINE 掃碼登入</h3>
+                <h3>📧 Google Mail 免密碼 OTP 登入</h3>
+                <button class="modal-close" onclick="app.closeModal('googleMailOtpModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="app.handleVerifyGoogleMailOtp(event)">
+                    <div class="form-group">
+                        <label>Google Mail 信箱地址</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="email" id="otpEmailInput" class="form-control" required placeholder="your.name@gmail.com">
+                            <button type="button" id="btnSendOtp" class="btn btn-primary btn-sm" style="white-space: nowrap;" onclick="app.handleSendGoogleMailOtp()">發送驗證碼</button>
+                        </div>
+                        <div id="otpStatusMsg" style="font-size: 0.8rem; margin-top: 6px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>6 位數 Email 驗證碼</label>
+                        <input type="text" id="otpCodeInput" class="form-control" placeholder="請輸入信箱收到的 6 位數" maxlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">驗證並登入</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. LINE QR Code Modal -->
+    <div id="lineQrModal" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h3>🟢 LINE 掃碼授權登入</h3>
                 <button class="modal-close" onclick="app.closeModal('lineQrModal')">&times;</button>
             </div>
-            <div class="qr-box">
-                <p style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">請使用手機開啟相機或 LINE 掃描此 QR Code</p>
-                <p style="font-size: 0.85rem; color: #64748b;">手機端點擊「同意授權」後，本畫面將自動同步登入！</p>
-                
-                <img id="lineQrImg" class="qr-img" src="" alt="LINE Login QR Code">
-                
-                <p id="lineQrStatusText" style="font-size: 0.9rem; color: #059669; font-weight: 600; margin-top: 8px;">
-                    🟢 等待手機端掃描授權中 (有效期限 5 分鐘)...
-                </p>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" class="btn btn-outline btn-block" onclick="app.openLineAuthUrl()">
-                    📱 在本機瀏覽器開啟手機授權頁 (模擬掃碼)
-                </button>
+            <div class="modal-body">
+                <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 12px;">請使用 LINE 行動 App 掃描下方 QR Code 完成身分授權</p>
+                <img id="lineQrImg" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" style="width: 180px; height: 180px; margin: 0 auto 12px auto; display: block; border: 1px solid #e2e8f0; padding: 6px; border-radius: 8px;" alt="LINE QR Code">
+                <p id="lineQrStatusText" style="font-size: 0.9rem; font-weight: 600; color: #059669; margin-bottom: 16px;">🟢 等待手機端掃描授權中...</p>
+                <button type="button" class="btn btn-outline btn-block" onclick="app.openLineAuthUrl()">🔗 於瀏覽器開啟授權網址</button>
             </div>
         </div>
     </div>
 
-    <!-- 4. Google OAuth 跳轉提示 Modal -->
-    <div class="modal" id="googleOAuthModal">
-        <div class="modal-content">
+    <!-- 4. Google OAuth Link Modal -->
+    <div id="googleAuthUrlModal" class="modal">
+        <div class="modal-content" style="max-width: 480px;">
             <div class="modal-header">
-                <h3>🌐 Google OAuth 2.0 授權登入</h3>
-                <button class="modal-close" onclick="app.closeModal('googleOAuthModal')">&times;</button>
+                <h3>🌐 Google OAuth2.0 授權</h3>
+                <button class="modal-close" onclick="app.closeModal('googleAuthUrlModal')">&times;</button>
             </div>
-            <div style="padding: 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
-                <p style="font-size: 0.95rem; line-net-height: 1.6; margin-bottom: 10px;">
-                    即將引導至 <strong>Google 官方 OAuth 2.0 授權頁面</strong>：
-                </p>
-                <code id="googleAuthUrlDisplay" style="display: block; word-break: break-all; font-size: 0.8rem; background: #ffffff; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; color: #1e40af; max-height: 100px; overflow-y: auto;"></code>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" class="btn btn-primary btn-block" onclick="app.proceedToGoogleAuth()">
-                    🚀 立即跳轉至 Google 授權頁面
-                </button>
-                <button type="button" class="btn btn-outline btn-block" onclick="app.simulateGoogleConsent()">
-                    ✨ 模擬 Google 帳號授權完成 (即時登入)
-                </button>
+            <div class="modal-body">
+                <p style="color: #475569; font-size: 0.9rem; margin-bottom: 12px;">點擊下方按鈕將導向 Google 官方授權伺服器：</p>
+                <div id="googleAuthUrlDisplay" style="background: #f8fafc; padding: 10px; border-radius: 6px; font-size: 0.75rem; word-break: break-all; color: #64748b; margin-bottom: 16px;"></div>
+                <button class="btn btn-primary btn-block" onclick="app.redirectToGoogleAuth()">🚀 前往 Google 登入授權</button>
             </div>
         </div>
     </div>
 
-    <!-- 5. 雙因子 2FA 驗證 Modal -->
-    <div class="modal" id="twoFactorVerifyModal">
-        <div class="modal-content">
+    <!-- 5. 2FA 登入校驗 Modal -->
+    <div id="twoFactorVerifyModal" class="modal">
+        <div class="modal-content" style="max-width: 420px;">
             <div class="modal-header">
-                <h3>Google Authenticator 雙因子驗證</h3>
+                <h3>🛡️ 2FA 雙步驟身分驗證</h3>
                 <button class="modal-close" onclick="app.closeModal('twoFactorVerifyModal')">&times;</button>
             </div>
-            <form onsubmit="app.handle2FAVerify(event)">
-                <p style="color: #64748b; margin-bottom: 16px;">此帳號已啟用 2FA，請開啟手機 Google Authenticator App 並輸入 6 位數驗證碼：</p>
-                <div class="form-group">
-                    <label>6 位數動態驗證碼</label>
-                    <input type="text" id="twoFactorCode" class="form-control" required placeholder="例如: 123456" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 4px;">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">驗證並登入</button>
-            </form>
+            <div class="modal-body">
+                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 14px;">您的帳號已啟用 2FA 保護，請輸入 Google Authenticator 產生的 6 位數安全碼：</p>
+                <form onsubmit="app.handle2FAVerify(event)">
+                    <div class="form-group">
+                        <label>6 位數動態安全碼</label>
+                        <input type="text" id="twoFactorCode" class="form-control" required placeholder="000000" maxlength="6" style="letter-spacing: 4px; font-size: 1.3rem; text-align: center;">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">驗證並登入</button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- 6. 房型預覽與多圖藝廊 Modal -->
-    <div class="modal" id="roomPreviewModal">
-        <div class="modal-content modal-lg">
+    <!-- 6. 2FA 設定啟用 Modal -->
+    <div id="twoFactorSetupModal" class="modal">
+        <div class="modal-content" style="max-width: 440px; text-align: center;">
             <div class="modal-header">
-                <h3 id="previewRoomTitle">房型詳情</h3>
-                <button class="modal-close" onclick="app.closeModal('roomPreviewModal')">&times;</button>
+                <h3>🛡️ 設定 Google Authenticator 2FA</h3>
+                <button class="modal-close" onclick="app.closeModal('twoFactorSetupModal')">&times;</button>
             </div>
-            <!-- Main Image & Gallery Carousel -->
-            <img id="previewMainImg" class="gallery-main-img" src="" alt="房型照片">
-            <div class="image-gallery" id="previewGalleryThumbs"></div>
-
-            <div style="margin: 16px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <p><strong>類別:</strong> <span id="previewRoomType"></span></p>
-                <p><strong>容納人數:</strong> <span id="previewRoomCapacity"></span></p>
-                <p><strong>每晚價格:</strong> <span id="previewRoomPrice" style="color: #2563eb; font-weight: bold;"></span></p>
-                <p><strong>設施提供:</strong> <span id="previewRoomAmenities"></span></p>
+            <div class="modal-body">
+                <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 10px;">使用 Google Authenticator App 掃描此 QR Code：</p>
+                <img id="2faQrImg" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" style="width: 170px; height: 170px; margin: 0 auto 12px auto; display: block; border: 1px solid #e2e8f0; padding: 4px; border-radius: 6px;" alt="2FA QR Code">
+                <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 14px;">金鑰 (手動輸入)：<code id="2faSecretKeyDisplay" style="color: #2563eb; font-weight: bold;"></code></div>
+                
+                <form onsubmit="app.confirm2FAEnable(event)">
+                    <div class="form-group" style="text-align: left;">
+                        <label>輸入 App 產生的 6 位數字代碼確認綁定</label>
+                        <input type="text" id="2faConfirmCode" class="form-control" required placeholder="000000" maxlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">確認啟用雙步驟防護</button>
+                </form>
             </div>
-            <p id="previewRoomDesc" style="color: #64748b; margin-bottom: 20px;"></p>
-
-            <form onsubmit="app.handleCreateBooking(event)" style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
-                <input type="hidden" id="bookingRoomId">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label>入住日期 (Check-in)</label>
-                        <input type="date" id="bookingCheckIn" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>退房日期 (Check-out)</label>
-                        <input type="date" id="bookingCheckOut" class="form-control" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>特殊需求備註 (選填)</label>
-                    <input type="text" id="bookingRequests" class="form-control" placeholder="例如：高樓層、嬰兒床、禁菸房">
-                </div>
-                <button type="submit" class="btn btn-success btn-block">立即線上下單預訂 (下單成功未付款)</button>
-            </form>
         </div>
     </div>
 
-    <!-- 7. 2FA 綁定 QR Code 設定 Modal -->
-    <div class="modal" id="setup2FAModal">
-        <div class="modal-content">
+    <!-- 7. 客房詳情與預訂下單 Modal -->
+    <div id="roomDetailModal" class="modal">
+        <div class="modal-content" style="max-width: 680px;">
             <div class="modal-header">
-                <h3>綁定 Google Authenticator</h3>
-                <button class="modal-close" onclick="app.closeModal('setup2FAModal')">&times;</button>
+                <h3 id="modalRoomTitle">豪華套房</h3>
+                <button class="modal-close" onclick="app.closeModal('roomDetailModal')">&times;</button>
             </div>
-            <div class="qr-box">
-                <p>請使用手機 App 掃描此 QR Code：</p>
-                <img id="setupQrImg" class="qr-img" src="" alt="2FA QR Code">
-                <p style="font-size: 0.85rem; color: #64748b;">若無法掃描，可手動輸入金鑰：<br><code id="setupManualKey" style="font-weight: bold; color: #2563eb;"></code></p>
-            </div>
-            <form onsubmit="app.handleConfirm2FA(event)">
-                <div class="form-group">
-                    <label>輸入 App 產生的 6 位數字代碼確認啟用</label>
-                    <input type="text" id="confirm2FACode" class="form-control" required maxlength="6" placeholder="例如: 654321">
+            <div class="modal-body">
+                <!-- Image Gallery -->
+                <div class="gallery-container">
+                    <img id="galleryMainImg" class="gallery-main" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Room Preview">
+                    <div id="galleryThumbsContainer" class="gallery-thumbnails"></div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">確認綁定並啟用</button>
-            </form>
+
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
+                    <span id="modalRoomCity" class="badge badge-paid">📍 台北市</span>
+                    <span id="modalRoomCapacity" class="badge badge-pending">最多可容納 2 位貴賓</span>
+                    <span id="modalRoomPrice" style="margin-left: auto; font-size: 1.3rem; font-weight: 800; color: #2563eb;">NT$ 0 / 晚</span>
+                </div>
+
+                <p id="modalRoomDesc" style="font-size: 0.9rem; color: #475569; margin-bottom: 12px;"></p>
+                <div style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; color: #334155; margin-bottom: 16px; border: 1px solid #e2e8f0;">
+                    <strong>✨ 專屬禮遇與設施：</strong> <span id="modalRoomAmenities"></span>
+                </div>
+
+                <form onsubmit="app.handleBookingSubmit(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label>入住日期 (Check-in)</label>
+                            <input type="date" id="bookCheckIn" class="form-control" required onchange="app.calculateBookingTotal()">
+                        </div>
+                        <div class="form-group">
+                            <label>退房日期 (Check-out)</label>
+                            <input type="date" id="bookCheckOut" class="form-control" required onchange="app.calculateBookingTotal()">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label>入住人數</label>
+                            <select id="bookGuests" class="form-control">
+                                <option value="1">1 位貴賓</option>
+                                <option value="2" selected>2 位貴賓</option>
+                                <option value="3">3 位貴賓</option>
+                                <option value="4">4 位貴賓</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>尊榮促銷優惠碼 (Promo Code)</label>
+                            <div style="display: flex; gap: 6px;">
+                                <input type="text" id="bookPromoCode" class="form-control" placeholder="如: LUXURY2026 / VIP888">
+                                <button type="button" class="btn btn-outline btn-sm" onclick="app.applyPromoCode()">套用</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>入住特別備註需求 (選填)</label>
+                        <input type="text" id="bookSpecialRequests" class="form-control" placeholder="例如：高樓層、安靜房型、需額外備品">
+                    </div>
+
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-top: 14px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #1e40af; margin-bottom: 4px;">
+                            <span>預訂天數：<strong id="bookSummaryNights">1 晚</strong></span>
+                            <span>優惠折扣：<strong id="bookSummaryDiscount">- NT$ 0</strong></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #93c5fd; padding-top: 8px; margin-top: 6px;">
+                            <span style="font-weight: 600; color: #1e3a8a;">應付總金額 (含稅與服務費)：</span>
+                            <span id="bookSummaryTotal" style="font-size: 1.35rem; font-weight: 800; color: #1e40af;">NT$ 0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSubmitBooking" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 16px;">
+                        💳 確認下單並發送確認信件
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- 8. 管理者房型新增/編輯 Modal (支援多圖上傳) -->
-    <div class="modal" id="adminRoomModal">
-        <div class="modal-content modal-lg">
+    <!-- 8. 美饌預約彈窗 (Fine Dining Modal) -->
+    <div id="diningBookModal" class="modal">
+        <div class="modal-content" style="max-width: 580px;">
             <div class="modal-header">
-                <h3 id="adminRoomModalTitle">維護房型</h3>
-                <button class="modal-close" onclick="app.closeModal('adminRoomModal')">&times;</button>
+                <h3>🍴 預約頂級美饌席位</h3>
+                <button class="modal-close" onclick="app.closeModal('diningBookModal')">&times;</button>
             </div>
-            <form onsubmit="app.handleSaveRoom(event)">
-                <input type="hidden" id="adminRoomId">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label>房型名稱</label>
-                        <input type="text" id="adminRoomName" class="form-control" required placeholder="如：海景尊爵套房">
-                    </div>
-                    <div class="form-group">
-                        <label>房型類別</label>
-                        <input type="text" id="adminRoomType" class="form-control" required placeholder="如：尊爵套房 / 經典雙人房">
+            <div class="modal-body">
+                <div style="background: #f8fafc; padding: 14px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0;">
+                    <h4 id="diningModalRestaurantName" style="color: #1e293b; font-size: 1.15rem; margin:0 0 4px 0;">餐廳名稱</h4>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                        <span id="diningModalCategoryBadge" class="badge badge-paid">米其林星級</span>
+                        <span id="diningModalPriceRange" class="badge badge-pending">NT$ 2,500 - 5,000 / 人</span>
+                        <span id="diningModalLocation" style="color: #64748b; font-size: 0.85rem; margin-left: auto;"></span>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div class="form-group">
-                        <label>每晚價格 (NT$)</label>
-                        <input type="number" id="adminRoomPrice" class="form-control" required min="0" step="100">
+
+                <form onsubmit="app.handleDiningSubmit(event)">
+                    <input type="hidden" id="diningModalRestaurantId">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>預約日期 <span style="color: red;">*</span></label>
+                            <input type="date" id="diningDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>用餐時段 <span style="color: red;">*</span></label>
+                            <select id="diningTimeSlot" class="form-control" required>
+                                <option value="午餐 11:30">午餐 11:30</option>
+                                <option value="午餐 12:00" selected>午餐 12:00</option>
+                                <option value="午餐 13:00">午餐 13:00</option>
+                                <option value="下午茶 14:30">下午茶 14:30</option>
+                                <option value="晚餐 18:00">晚餐 18:00</option>
+                                <option value="晚餐 19:30">晚餐 19:30</option>
+                                <option value="晚餐 20:30">晚餐 20:30</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>容納人數</label>
-                        <input type="number" id="adminRoomCapacity" class="form-control" required min="1">
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>用餐人數 <span style="color: red;">*</span></label>
+                            <select id="diningPartySize" class="form-control" required>
+                                <option value="1">1 位</option>
+                                <option value="2" selected>2 位 (浪漫專屬桌)</option>
+                                <option value="4">4 位 (舒適雅座)</option>
+                                <option value="6">6 位 (專屬包廂)</option>
+                                <option value="8">8 位以上 (私廚包場宴席)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>貴賓姓名 <span style="color: red;">*</span></label>
+                            <input type="text" id="diningCustName" class="form-control" required placeholder="請輸入姓名">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>設施特色</label>
-                    <input type="text" id="adminRoomAmenities" class="form-control" placeholder="浴缸, 景觀陽台, 免費早餐, 膠囊咖啡機">
-                </div>
-                <div class="form-group">
-                    <label>房型描述</label>
-                    <textarea id="adminRoomDesc" class="form-control" rows="3" placeholder="請輸入詳細房型說明"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>上傳多組房型圖片 (支援批次上傳)</label>
-                    <input type="file" id="adminRoomFiles" class="form-control" multiple accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label>圖片網址列表 (每行一個 URL，可直接貼上圖片連結)</label>
-                    <textarea id="adminRoomImageUrls" class="form-control" rows="3" placeholder="https://..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">儲存房型資料</button>
-            </form>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>聯絡電話 <span style="color: red;">*</span></label>
+                            <input type="text" id="diningCustPhone" class="form-control" required placeholder="例如: 0912-345-678">
+                        </div>
+                        <div class="form-group">
+                            <label>確認信接收 Email</label>
+                            <input type="email" id="diningCustEmail" class="form-control" placeholder="留空則使用會員 Email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>用餐特別備註 (過敏原、靠窗座、紀念日慶祝...)</label>
+                        <input type="text" id="diningSpecialRequests" class="form-control" placeholder="例如：慶祝結婚紀念日，希望能安排高樓景觀座">
+                    </div>
+
+                    <button type="submit" id="btnSubmitDining" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 12px;">
+                        ✨ 確認送出美饌預約
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- 9. 管理者修改非管理者使用者 Modal -->
-    <div class="modal" id="adminUserEditModal">
-        <div class="modal-content">
+    <!-- 9. 體驗票券購買彈窗 (Ticket Purchase Modal) -->
+    <div id="ticketPurchaseModal" class="modal">
+        <div class="modal-content" style="max-width: 560px;">
             <div class="modal-header">
-                <h3>管理者修改使用者資料</h3>
-                <button class="modal-close" onclick="app.closeModal('adminUserEditModal')">&times;</button>
+                <h3>🎟️ 購買休閒體驗票券</h3>
+                <button class="modal-close" onclick="app.closeModal('ticketPurchaseModal')">&times;</button>
             </div>
-            <form onsubmit="app.handleSaveNonAdminUser(event)">
-                <input type="hidden" id="adminTargetUserId">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="adminTargetUserEmail" class="form-control" required>
+            <div class="modal-body">
+                <div style="background: #f8fafc; padding: 14px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0;">
+                    <h4 id="ticketModalTitle" style="color: #1e293b; font-size: 1.15rem; margin:0 0 4px 0;">票券名稱</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                        <span id="ticketModalLocation" style="color: #64748b; font-size: 0.85rem;"></span>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #2563eb;" id="ticketModalPrice">NT$ 0</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>姓名</label>
-                    <input type="text" id="adminTargetUserFullName" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>聯絡電話</label>
-                    <input type="text" id="adminTargetUserPhone" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" id="adminTargetUser2FA">
-                        啟用 / 重設 2FA 雙因子驗證
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">更新使用者資料</button>
-            </form>
+
+                <form onsubmit="app.handleTicketSubmit(event)">
+                    <input type="hidden" id="ticketModalId">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>購買張數 <span style="color: red;">*</span></label>
+                            <input type="number" id="ticketQty" class="form-control" min="1" max="20" value="1" required onchange="app.calculateTicketTotal()">
+                        </div>
+                        <div class="form-group">
+                            <label>取票人姓名 <span style="color: red;">*</span></label>
+                            <input type="text" id="ticketCustName" class="form-control" required placeholder="請輸入姓名">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>聯絡電話 <span style="color: red;">*</span></label>
+                            <input type="text" id="ticketCustPhone" class="form-control" required placeholder="例如: 0912-345-678">
+                        </div>
+                        <div class="form-group">
+                            <label>憑證寄送 Email</label>
+                            <input type="email" id="ticketCustEmail" class="form-control" placeholder="留空則使用會員 Email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>付款方式</label>
+                        <select id="ticketPaymentMethod" class="form-control">
+                            <option value="CREDIT_CARD">💳 線上信用卡 / 簽帳卡</option>
+                            <option value="LINE_PAY">💬 LINE Pay 行動支付</option>
+                            <option value="APPLE_PAY">🍎 Apple Pay</option>
+                        </select>
+                    </div>
+
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <span>結帳總計金額：</span>
+                        <strong id="ticketSummaryTotal" style="font-size: 1.3rem; color: #1e3a8a;">NT$ 0</strong>
+                    </div>
+
+                    <button type="submit" id="btnSubmitTicket" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 16px;">
+                        🚀 立即付款並產生核銷 QR Code
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- Application Script -->
-    <script src="/js/app.js"></script>
+    <!-- 10. 票券憑證與 QR Code Modal -->
+    <div id="ticketVoucherModal" class="modal">
+        <div class="modal-content" style="max-width: 440px; text-align: center;">
+            <div class="modal-header">
+                <h3>🎟️ 體驗票券核銷憑證</h3>
+                <button class="modal-close" onclick="app.closeModal('ticketVoucherModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4 id="voucherTicketTitle" style="color: #1e293b; font-size: 1.2rem; margin-bottom: 6px;">體驗名稱</h4>
+                <p id="voucherOrderNumber" style="color: #2563eb; font-weight: 700; margin: 0 0 14px 0;">訂單編號: #000</p>
+                
+                <img id="voucherQrImg" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" style="width: 190px; height: 190px; margin: 0 auto 12px auto; display: block; border: 1px solid #e2e8f0; padding: 6px; border-radius: 8px;" alt="Voucher QR">
+                <div style="background: #f8fafc; padding: 10px; border-radius: 6px; font-size: 0.85rem; color: #475569; margin-bottom: 16px;">
+                    <div>核銷憑證碼：<code id="voucherQrText" style="color: #2563eb; font-weight: bold;"></code></div>
+                    <div style="margin-top: 4px;">持票人：<span id="voucherCustName"></span> (<span id="voucherCustPhone"></span>) • <span id="voucherQty">1</span> 張</div>
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" onclick="app.closeModal('ticketVoucherModal')">確定並關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 11. 後台房型編輯 Modal -->
+    <div id="adminRoomEditModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="adminRoomModalTitle">編輯房型資料</h3>
+                <button class="modal-close" onclick="app.closeModal('adminRoomEditModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="app.handleAdminRoomSave(event)">
+                    <input type="hidden" id="editRoomId">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label>所在城市/地區</label>
+                            <input type="text" id="editRoomCity" class="form-control" required placeholder="如: 台北市、花蓮縣">
+                        </div>
+                        <div class="form-group">
+                            <label>房型名稱</label>
+                            <input type="text" id="editRoomName" class="form-control" required placeholder="如: 全景海景頂級套房">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label>房型分類</label>
+                            <input type="text" id="editRoomType" class="form-control" required placeholder="如: 海景尊爵套房">
+                        </div>
+                        <div class="form-group">
+                            <label>每晚價格 (NT$)</label>
+                            <input type="number" id="editRoomPrice" class="form-control" required min="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>容納人數</label>
+                            <input type="number" id="editRoomCapacity" class="form-control" required min="1" max="20">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>上架狀態</label>
+                        <select id="editRoomStatus" class="form-control">
+                            <option value="AVAILABLE">AVAILABLE (正常上架中)</option>
+                            <option value="MAINTENANCE">MAINTENANCE (保養維護中)</option>
+                            <option value="OCCUPIED">OCCUPIED (客滿)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>專屬設施 (逗號分隔)</label>
+                        <input type="text" id="editRoomAmenities" class="form-control" placeholder="全景陽台, 頂級浴缸, 迎賓香檳">
+                    </div>
+
+                    <div class="form-group">
+                        <label>房型詳細介紹</label>
+                        <textarea id="editRoomDesc" class="form-control" rows="2" placeholder="請輸入房型介紹..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>圖片網址清單 (每行一個 URL)</label>
+                        <textarea id="editRoomImages" class="form-control" rows="3" placeholder="https://images.unsplash.com/..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 12px;">儲存房型資料</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12. 商城購物車彈窗 (SPA Cart Modal) -->
+    <div id="spaCartModal" class="modal">
+        <div class="modal-content" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3>🛒 我的購物車明細</h3>
+                <button class="modal-close" onclick="app.closeShopCartModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="spaCartItemsList" style="max-height: 320px; overflow-y: auto; margin-bottom: 16px;">
+                    <!-- Cart Items Injected -->
+                </div>
+
+                <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #64748b; margin-bottom: 6px;">
+                        <span>商品小計：</span>
+                        <strong id="spaCartSubtotal" style="color: #1e293b;">NT$ 0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #64748b; margin-bottom: 6px;">
+                        <span>運費 (滿 $1,500 免運)：</span>
+                        <strong id="spaCartShipping" style="color: #16a34a;">NT$ 0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #1e3a8a; border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 6px;">
+                        <span>結帳總額：</span>
+                        <span id="spaCartTotal">NT$ 0</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-outline" style="flex: 1;" onclick="app.clearShopCart()">清空購物車</button>
+                    <button type="button" class="btn btn-primary" style="flex: 2;" onclick="app.openShopCheckoutModal()">🚀 前往結帳下單</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 13. 商城安全結帳彈窗 (SPA Checkout Modal) -->
+    <div id="spaCheckoutModal" class="modal">
+        <div class="modal-content" style="max-width: 560px;">
+            <div class="modal-header">
+                <h3>💳 填寫收件資訊與安全結帳</h3>
+                <button class="modal-close" onclick="app.closeShopCheckoutModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="app.handleShopCheckoutSubmit(event)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-group">
+                            <label>收件人姓名 <span style="color: red;">*</span></label>
+                            <input type="text" id="spaOrderCustName" class="form-control" required placeholder="王小明">
+                        </div>
+                        <div class="form-group">
+                            <label>聯絡電話 <span style="color: red;">*</span></label>
+                            <input type="text" id="spaOrderCustPhone" class="form-control" required placeholder="0912-345-678">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>訂單通知與明細發送 Email <span style="color: red;">*</span></label>
+                        <input type="email" id="spaOrderCustEmail" class="form-control" required placeholder="name@luxuryhotel.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>配送地址 (黑貓宅急便 / 宅配到府) <span style="color: red;">*</span></label>
+                        <input type="text" id="spaOrderAddress" class="form-control" required placeholder="台北市信義區松高路 88 號 12 樓">
+                    </div>
+
+                    <div class="form-group">
+                        <label>訂單備註 / 配送時段需求</label>
+                        <input type="text" id="spaOrderNotes" class="form-control" placeholder="例如：請於平日下午配送、管理室代收">
+                    </div>
+
+                    <div class="form-group">
+                        <label>付款方式選擇</label>
+                        <select id="spaOrderPayMethod" class="form-control">
+                            <option value="LINE_PAY">💬 LINE Pay 行動支付</option>
+                            <option value="CREDIT_CARD">💳 線上信用卡 (0 利率)</option>
+                            <option value="APPLE_PAY">🍎 Apple Pay</option>
+                            <option value="COD">📦 超商貨到付款</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 16px;">
+                        <i id="spaOrderSpinner" class="fa-solid fa-spinner fa-spin d-none"></i>
+                        <span id="spaBtnSubmitText">確認送出訂單並寄發 Email</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 14. 商城下單成功彈窗 (SPA Order Success Modal) -->
+    <div id="spaOrderSuccessModal" class="modal">
+        <div class="modal-content" style="max-width: 460px; text-align: center;">
+            <div class="modal-header">
+                <h3>🎉 訂單成立成功！</h3>
+                <button class="modal-close" onclick="app.closeShopSuccessModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 3rem; color: #16a34a; margin-bottom: 12px;">✅</div>
+                <h4 style="font-size: 1.2rem; color: #1e293b; margin: 0 0 6px 0;">感謝您的訂購！</h4>
+                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 16px;">訂單確認信件已同步寄發至您的電子信箱</p>
+                
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; text-align: left; font-size: 0.9rem; margin-bottom: 20px;">
+                    <div style="margin-bottom: 6px;"><strong>訂單編號：</strong> <code id="spaSuccessOrderNum" style="color: #2563eb;"></code></div>
+                    <div style="margin-bottom: 6px;"><strong>付款方式：</strong> <span id="spaSuccessPayMethod"></span></div>
+                    <div style="margin-bottom: 6px;"><strong>結帳金額：</strong> <strong id="spaSuccessTotal" style="color: #059669;"></strong></div>
+                    <div><strong>通知信箱：</strong> <span id="spaSuccessEmail"></span></div>
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" onclick="app.closeShopSuccessModal()">返回商城繼續選購</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Shopping Cart Button (Mobile & Quick Access) -->
+    <div style="position: fixed; right: 24px; bottom: 24px; z-index: 999;">
+        <button type="button" class="btn btn-primary" onclick="app.openShopCartModal()" style="width: 58px; height: 58px; border-radius: 50%; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; position: relative;">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="spaCartBadgeCount" style="position: absolute; top: -4px; right: -4px; background: #dc2626; color: white; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #ffffff; transition: transform 0.2s;">0</span>
+        </button>
+    </div>
+
+    <!-- Frontend Core Application Script -->
+    <script src="/js/app.js?v=20260922_v5"></script>
 </body>
 </html>

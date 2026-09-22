@@ -56,6 +56,7 @@ public class HotelService {
         Room room = Room.builder()
                 .name(request.getName())
                 .roomType(request.getRoomType())
+                .city(request.getCity())
                 .pricePerNight(request.getPricePerNight())
                 .capacity(request.getCapacity())
                 .description(request.getDescription())
@@ -87,6 +88,7 @@ public class HotelService {
 
         room.setName(request.getName());
         room.setRoomType(request.getRoomType());
+        room.setCity(request.getCity());
         room.setPricePerNight(request.getPricePerNight());
         room.setCapacity(request.getCapacity());
         room.setDescription(request.getDescription());
@@ -147,6 +149,7 @@ public class HotelService {
                 .id(room.getId())
                 .name(room.getName())
                 .roomType(room.getRoomType())
+                .city(room.getCity())
                 .pricePerNight(room.getPricePerNight())
                 .capacity(room.getCapacity())
                 .description(room.getDescription())

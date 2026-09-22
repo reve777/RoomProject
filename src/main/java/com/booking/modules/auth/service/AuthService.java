@@ -150,13 +150,11 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
-        // Send welcome email
-        String roleTitle = requestedAdmin ? "【系統管理員】" : "【尊榮貴賓】";
-        emailService.sendSimpleEmail(
-                savedUser.getEmail(),
-                "【Grand Luxury Hotel】歡迎加入！帳號註冊成功",
-                "親愛的 " + (savedUser.getFullName() != null ? savedUser.getFullName() : savedUser.getUsername()) + " 您好，\n\n歡迎您註冊成為 " + roleTitle + "！\n您現在可以開始預訂奢華房型與管理訂單及個人帳號資訊。"
-        );
+        // 發送 5 種隨機高情緒價值歡迎信
+        String displayName = (savedUser.getFullName() != null && !savedUser.getFullName().isBlank())
+                ? savedUser.getFullName()
+                : savedUser.getUsername();
+        emailService.sendRegistrationWelcomeEmail(savedUser.getEmail(), displayName, requestedAdmin);
 
         String roleClaimString = savedUser.getRoles().stream().map(r -> r.getName().name()).collect(Collectors.joining(","));
         String token = tokenProvider.generateTokenForUser(

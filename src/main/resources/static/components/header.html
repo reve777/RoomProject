@@ -40,13 +40,18 @@
 
 <header class="navbar">
     <div class="nav-container">
+        <!-- Mobile Menu Hamburger Button -->
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggleBtn" onclick="if(window.app){app.toggleMobileMenu()}else{document.querySelector('.sidebar')?.classList.toggle('open')}" aria-label="切換選單">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
         <div class="logo" style="cursor: pointer;" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}">
             <span class="icon">🏨</span>
-            <span class="brand-name">Grand Luxury 多功能綜合平台</span>
+            <span class="brand-name">Grand Luxury</span>
         </div>
         
-        <!-- Center Quick Switch Tabs -->
-        <div style="display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 10px; border: 1px solid #e2e8f0;">
+        <!-- Center Quick Switch Tabs (Desktop/Tablet) -->
+        <div class="header-center-tabs" style="display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 10px; border: 1px solid #e2e8f0;">
             <button type="button" class="btn btn-sm" id="headerNavBookingBtn" onclick="if(window.app){app.switchView('roomsView')}else{window.location.href='/index.html'}" style="background: #2563eb; color: white; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
                 <span>🏨 飯店訂房系統</span>
             </button>
@@ -55,14 +60,14 @@
             </button>
         </div>
 
-        <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
+        <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
             <div id="authGuestSection" class="auth-buttons">
-                <button class="btn btn-guest" onclick="if(window.app){app.handleGuestLogin()}else if(window.quickShopGuestLogin){quickShopGuestLogin()}else{window.location.href='/index.html?action=guest'}">👤 訪客登入</button>
-                <button class="btn btn-outline" onclick="if(window.app){app.showModal('loginModal')}else if(window.openShopAuthModal){openShopAuthModal('login')}else{window.location.href='/index.html?action=login'}">會員登入</button>
-                <button class="btn btn-primary" onclick="if(window.app){app.switchView('registerView')}else if(window.openShopAuthModal){openShopAuthModal('register')}else{window.location.href='/index.html?action=register'}">📝 免費註冊</button>
+                <button class="btn btn-guest btn-sm" onclick="if(window.app){app.handleGuestLogin()}else if(window.quickShopGuestLogin){quickShopGuestLogin()}else{window.location.href='/index.html?action=guest'}">👤 訪客</button>
+                <button class="btn btn-outline btn-sm" onclick="if(window.app){app.showModal('loginModal')}else if(window.openShopAuthModal){openShopAuthModal('login')}else{window.location.href='/index.html?action=login'}">登入</button>
+                <button class="btn btn-primary btn-sm desk-only" onclick="if(window.app){app.switchView('registerView')}else if(window.openShopAuthModal){openShopAuthModal('register')}else{window.location.href='/index.html?action=register'}">註冊</button>
             </div>
             <div id="authUserSection" class="user-menu d-none">
-                <span id="userGreeting" class="user-badge">歡迎, 訪客</span>
+                <span id="userGreeting" class="user-badge desk-only">歡迎, 訪客</span>
                 <button class="btn btn-sm btn-outline" onclick="if(window.app){app.switchView('profileView')}else{window.location.href='/index.html?view=profileView'}">個人中心</button>
                 <button class="btn btn-sm btn-danger" onclick="if(window.app){app.logout()}else{localStorage.removeItem('token');localStorage.removeItem('user');window.location.reload();}">登出</button>
             </div>

@@ -44,50 +44,62 @@ public class DataInitializer implements CommandLineRunner {
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseGet(() -> roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build()));
 
-        // 建立預設管理者帳號 (admin / admin1234)
-        if (!userRepository.existsByUsername("admin")) {
+        // 建立/更新預設管理員帳號 (admin / admin123)
+        userRepository.findByUsername("admin").ifPresentOrElse(admin -> {
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setRoles(Set.of(adminRole, userRole));
+            userRepository.save(admin);
+        }, () -> {
             User admin = User.builder()
                     .username("admin")
                     .email("admin@hotelbooking.com")
-                    .password(passwordEncoder.encode("admin1234"))
+                    .password(passwordEncoder.encode("admin123"))
                     .fullName("系統最高管理者")
                     .phone("0900-000-000")
                     .twoFactorEnabled(false)
                     .roles(Set.of(adminRole, userRole))
                     .build();
             userRepository.save(admin);
-            log.info("預設管理員帳號建立完成: admin / admin1234");
-        }
+            log.info("預設管理員帳號建立完成: admin / admin123");
+        });
 
-        // 建立一般測試使用者 (testuser / user1234)
-        if (!userRepository.existsByUsername("testuser")) {
-            User testUser = User.builder()
-                    .username("testuser")
+        // 建立/更新一般測試使用者 (user / user123)
+        userRepository.findByUsername("user").ifPresentOrElse(user -> {
+            user.setPassword(passwordEncoder.encode("user123"));
+            user.setRoles(Collections.singleton(userRole));
+            userRepository.save(user);
+        }, () -> {
+            User user = User.builder()
+                    .username("user")
                     .email("user@example.com")
-                    .password(passwordEncoder.encode("user1234"))
-                    .fullName("測試會員")
+                    .password(passwordEncoder.encode("user123"))
+                    .fullName("尊榮VIP會員")
                     .phone("0912-345-678")
                     .twoFactorEnabled(false)
                     .roles(Collections.singleton(userRole))
                     .build();
-            userRepository.save(testUser);
-            log.info("預設測試會員帳號建立完成: testuser / user1234");
-        }
+            userRepository.save(user);
+            log.info("預設測試會員帳號建立完成: user / user123");
+        });
 
-        // 建立訪客體驗專用帳號 (guest / guest1234)
-        if (!userRepository.existsByUsername("guest")) {
+        // 建立/更新訪客體驗專用帳號 (guest / guest123)
+        userRepository.findByUsername("guest").ifPresentOrElse(guest -> {
+            guest.setPassword(passwordEncoder.encode("guest123"));
+            guest.setRoles(Collections.singleton(userRole));
+            userRepository.save(guest);
+        }, () -> {
             User guestUser = User.builder()
                     .username("guest")
                     .email("guest@hotelbooking.com")
-                    .password(passwordEncoder.encode("guest1234"))
+                    .password(passwordEncoder.encode("guest123"))
                     .fullName("訪客體驗貴賓")
                     .phone("0988-888-888")
                     .twoFactorEnabled(false)
                     .roles(Collections.singleton(userRole))
                     .build();
             userRepository.save(guestUser);
-            log.info("預設訪客體驗帳號建立完成: guest / guest1234");
-        }
+            log.info("預設訪客體驗帳號建立完成: guest / guest123");
+        });
 
         // 初始化全台灣各縣市 95 家精選星級飯店與特色房型資料
         taiwanHotelSeeder.seedHotelsIfEmpty();

@@ -11,6 +11,10 @@ public class BookingDto {
     private Long userId;
     private String username;
     private String userEmail;
+    private String contactName;
+    private String contactPhone;
+    private String contactEmail;
+    private Integer guests;
     private Long roomId;
     private String roomName;
     private String roomType;
@@ -26,6 +30,7 @@ public class BookingDto {
     public BookingDto() {}
 
     public BookingDto(Long id, String bookingNumber, Long userId, String username, String userEmail,
+                      String contactName, String contactPhone, String contactEmail, Integer guests,
                       Long roomId, String roomName, String roomType, String roomImageUrl,
                       LocalDate checkInDate, LocalDate checkOutDate, Double totalPrice,
                       BookingStatus status, String statusDescription, String specialRequests,
@@ -35,6 +40,10 @@ public class BookingDto {
         this.userId = userId;
         this.username = username;
         this.userEmail = userEmail;
+        this.contactName = contactName;
+        this.contactPhone = contactPhone;
+        this.contactEmail = contactEmail;
+        this.guests = guests;
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomType = roomType;
@@ -86,6 +95,38 @@ public class BookingDto {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public Integer getGuests() {
+        return guests;
+    }
+
+    public void setGuests(Integer guests) {
+        this.guests = guests;
     }
 
     public Long getRoomId() {
@@ -174,113 +215,5 @@ public class BookingDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public static BookingDtoBuilder builder() {
-        return new BookingDtoBuilder();
-    }
-
-    public static class BookingDtoBuilder {
-        private Long id;
-        private String bookingNumber;
-        private Long userId;
-        private String username;
-        private String userEmail;
-        private Long roomId;
-        private String roomName;
-        private String roomType;
-        private String roomImageUrl;
-        private LocalDate checkInDate;
-        private LocalDate checkOutDate;
-        private Double totalPrice;
-        private BookingStatus status;
-        private String statusDescription;
-        private String specialRequests;
-        private LocalDateTime createdAt;
-
-        public BookingDtoBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public BookingDtoBuilder bookingNumber(String bookingNumber) {
-            this.bookingNumber = bookingNumber;
-            return this;
-        }
-
-        public BookingDtoBuilder userId(Long userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public BookingDtoBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public BookingDtoBuilder userEmail(String userEmail) {
-            this.userEmail = userEmail;
-            return this;
-        }
-
-        public BookingDtoBuilder roomId(Long roomId) {
-            this.roomId = roomId;
-            return this;
-        }
-
-        public BookingDtoBuilder roomName(String roomName) {
-            this.roomName = roomName;
-            return this;
-        }
-
-        public BookingDtoBuilder roomType(String roomType) {
-            this.roomType = roomType;
-            return this;
-        }
-
-        public BookingDtoBuilder roomImageUrl(String roomImageUrl) {
-            this.roomImageUrl = roomImageUrl;
-            return this;
-        }
-
-        public BookingDtoBuilder checkInDate(LocalDate checkInDate) {
-            this.checkInDate = checkInDate;
-            return this;
-        }
-
-        public BookingDtoBuilder checkOutDate(LocalDate checkOutDate) {
-            this.checkOutDate = checkOutDate;
-            return this;
-        }
-
-        public BookingDtoBuilder totalPrice(Double totalPrice) {
-            this.totalPrice = totalPrice;
-            return this;
-        }
-
-        public BookingDtoBuilder status(BookingStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public BookingDtoBuilder statusDescription(String statusDescription) {
-            this.statusDescription = statusDescription;
-            return this;
-        }
-
-        public BookingDtoBuilder specialRequests(String specialRequests) {
-            this.specialRequests = specialRequests;
-            return this;
-        }
-
-        public BookingDtoBuilder createdAt(LocalDateTime createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public BookingDto build() {
-            return new BookingDto(id, bookingNumber, userId, username, userEmail, roomId, roomName, roomType, roomImageUrl,
-                    checkInDate, checkOutDate, totalPrice, status, statusDescription, specialRequests, createdAt);
-        }
     }
 }

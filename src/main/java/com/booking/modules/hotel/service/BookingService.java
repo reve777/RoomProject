@@ -99,6 +99,17 @@ public class BookingService {
 
         String bookingNumber = "BK-" + System.currentTimeMillis() + "-" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
 
+        String contactEmail = (request.getContactEmail() != null && !request.getContactEmail().isBlank())
+                ? request.getContactEmail().trim()
+                : user.getEmail();
+        String contactName = (request.getContactName() != null && !request.getContactName().isBlank())
+                ? request.getContactName().trim()
+                : (user.getFullName() != null ? user.getFullName() : user.getUsername());
+        String contactPhone = (request.getContactPhone() != null && !request.getContactPhone().isBlank())
+                ? request.getContactPhone().trim()
+                : "0912-345-678";
+        Integer guests = (request.getGuests() != null && request.getGuests() > 0) ? request.getGuests() : 2;
+
         Booking booking = Booking.builder()
                 .bookingNumber(bookingNumber)
                 .user(user)
@@ -107,6 +118,10 @@ public class BookingService {
                 .checkOutDate(request.getCheckOutDate())
                 .totalPrice(totalPrice)
                 .status(BookingStatus.PENDING_PAYMENT)
+                .contactName(contactName)
+                .contactPhone(contactPhone)
+                .contactEmail(contactEmail)
+                .guests(guests)
                 .specialRequests(request.getSpecialRequests())
                 .build();
 
@@ -115,8 +130,8 @@ public class BookingService {
         // Async Email Notification
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         emailService.sendBookingConfirmationEmail(
-                user.getEmail(),
-                user.getFullName() != null ? user.getFullName() : user.getUsername(),
+                contactEmail,
+                contactName,
                 saved.getBookingNumber(),
                 room.getName(),
                 request.getCheckInDate().format(formatter),
@@ -152,9 +167,13 @@ public class BookingService {
         booking.setStatus(newStatus);
         Booking saved = bookingRepository.save(booking);
 
+        String targetEmail = (booking.getContactEmail() != null && !booking.getContactEmail().isBlank())
+                ? booking.getContactEmail()
+                : booking.getUser().getEmail();
+
         // Notify user about status change
         emailService.sendSimpleEmail(
-                booking.getUser().getEmail(),
+                targetEmail,
                 "【訂單狀態更新】訂單編號: " + booking.getBookingNumber(),
                 "親愛的貴賓您好，\n\n您的訂房訂單 " + booking.getBookingNumber() + " 狀態已更新為：【" + newStatus.getDescription() + " (" + newStatus.name() + ")】。\n如有任何問題歡迎隨時與我們聯繫。"
         );
@@ -174,9 +193,13 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELLED);
         Booking saved = bookingRepository.save(booking);
 
+        String targetEmail = (booking.getContactEmail() != null && !booking.getContactEmail().isBlank())
+                ? booking.getContactEmail()
+                : booking.getUser().getEmail();
+
         // Send cancellation email
         emailService.sendSimpleEmail(
-                booking.getUser().getEmail(),
+                targetEmail,
                 "【訂單取消通知】訂單編號: " + booking.getBookingNumber(),
                 "親愛的貴賓您好，\n\n您的訂單 " + booking.getBookingNumber() + " 已成功取消。"
         );
@@ -191,23 +214,27 @@ public class BookingService {
                 .findFirst()
                 .orElse(booking.getRoom().getImages().isEmpty() ? null : booking.getRoom().getImages().get(0).getImageUrl());
 
-        return BookingDto.builder()
-                .id(booking.getId())
-                .bookingNumber(booking.getBookingNumber())
-                .userId(booking.getUser().getId())
-                .username(booking.getUser().getUsername())
-                .userEmail(booking.getUser().getEmail())
-                .roomId(booking.getRoom().getId())
-                .roomName(booking.getRoom().getName())
-                .roomType(booking.getRoom().getRoomType())
-                .roomImageUrl(primaryImage)
-                .checkInDate(booking.getCheckInDate())
-                .checkOutDate(booking.getCheckOutDate())
-                .totalPrice(booking.getTotalPrice())
-                .status(booking.getStatus())
-                .statusDescription(booking.getStatus().getDescription())
-                .specialRequests(booking.getSpecialRequests())
-                .createdAt(booking.getCreatedAt())
-                .build();
+        return new BookingDto(
+                booking.getId(),
+                booking.getBookingNumber(),
+                booking.getUser().getId(),
+                booking.getUser().getUsername(),
+                booking.getUser().getEmail(),
+                booking.getContactName() != null ? booking.getContactName() : (booking.getUser().getFullName() != null ? booking.getUser().getFullName() : booking.getUser().getUsername()),
+                booking.getContactPhone() != null ? booking.getContactPhone() : "0912-345-678",
+                booking.getContactEmail() != null ? booking.getContactEmail() : booking.getUser().getEmail(),
+                booking.getGuests() != null ? booking.getGuests() : 2,
+                booking.getRoom().getId(),
+                booking.getRoom().getName(),
+                booking.getRoom().getRoomType(),
+                primaryImage,
+                booking.getCheckInDate(),
+                booking.getCheckOutDate(),
+                booking.getTotalPrice(),
+                booking.getStatus(),
+                booking.getStatus().getDescription(),
+                booking.getSpecialRequests(),
+                booking.getCreatedAt()
+        );
     }
 }

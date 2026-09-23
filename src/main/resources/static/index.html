@@ -828,77 +828,97 @@
 
     <!-- 7. 客房詳情與預訂下單 Modal -->
     <div id="roomDetailModal" class="modal">
-        <div class="modal-content" style="max-width: 680px;">
+        <div class="modal-content room-booking-modal-content" style="max-width: 680px;">
             <div class="modal-header">
-                <h3 id="modalRoomTitle">豪華套房</h3>
+                <h3 id="modalRoomTitle" class="modal-room-title">豪華客房</h3>
                 <button class="modal-close" onclick="app.closeModal('roomDetailModal')">&times;</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body room-booking-modal-body">
                 <!-- Image Gallery -->
-                <div class="gallery-container">
+                <div class="gallery-container modal-room-gallery">
                     <img id="galleryMainImg" class="gallery-main" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Room Preview">
                     <div id="galleryThumbsContainer" class="gallery-thumbnails"></div>
                 </div>
 
-                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
-                    <span id="modalRoomCity" class="badge badge-paid">📍 台北市</span>
-                    <span id="modalRoomCapacity" class="badge badge-pending">最多可容納 2 位貴賓</span>
-                    <span id="modalRoomPrice" style="margin-left: auto; font-size: 1.3rem; font-weight: 800; color: #2563eb;">NT$ 0 / 晚</span>
+                <div class="modal-room-tags-row" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
+                    <div class="modal-room-badges" style="display: flex; gap: 8px;">
+                        <span id="modalRoomCity" class="badge badge-paid">📍 台北市</span>
+                        <span id="modalRoomCapacity" class="badge badge-pending">最多可容納 2 位貴賓</span>
+                    </div>
+                    <div id="modalRoomPrice" class="modal-room-price-tag" style="margin-left: auto; font-size: 1.3rem; font-weight: 800; color: #2563eb;">NT$ 0 / 晚</div>
                 </div>
 
-                <p id="modalRoomDesc" style="font-size: 0.9rem; color: #475569; margin-bottom: 12px;"></p>
-                <div style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; color: #334155; margin-bottom: 16px; border: 1px solid #e2e8f0;">
+                <p id="modalRoomDesc" class="modal-room-desc" style="font-size: 0.9rem; color: #475569; margin-bottom: 12px;"></p>
+                <div class="modal-room-amenities-box" style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; color: #334155; margin-bottom: 16px; border: 1px solid #e2e8f0;">
                     <strong>✨ 專屬禮遇與設施：</strong> <span id="modalRoomAmenities"></span>
                 </div>
 
-                <form onsubmit="app.handleBookingSubmit(event)">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                <form onsubmit="app.handleBookingSubmit(event)" class="room-booking-form">
+                    <div class="modal-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
                         <div class="form-group">
-                            <label>入住日期 (Check-in)</label>
+                            <label><i class="fa-regular fa-calendar-check"></i> 入住日期 (Check-in) <span style="color: red;">*</span></label>
                             <input type="date" id="bookCheckIn" class="form-control" required onchange="app.calculateBookingTotal()">
                         </div>
                         <div class="form-group">
-                            <label>退房日期 (Check-out)</label>
+                            <label><i class="fa-regular fa-calendar-xmark"></i> 退房日期 (Check-out) <span style="color: red;">*</span></label>
                             <input type="date" id="bookCheckOut" class="form-control" required onchange="app.calculateBookingTotal()">
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="modal-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
                         <div class="form-group">
-                            <label>入住人數</label>
+                            <label><i class="fa-solid fa-envelope"></i> 訂房聯絡 Email (接收確認憑證) <span style="color: red;">*</span></label>
+                            <input type="email" id="bookGuestEmail" class="form-control" placeholder="例如：vip.guest@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-user"></i> 入住貴賓姓名 <span style="color: red;">*</span></label>
+                            <input type="text" id="bookGuestName" class="form-control" placeholder="例如：王大明 / 尊榮貴賓" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-phone"></i> 聯絡手機號碼 <span style="color: red;">*</span></label>
+                            <input type="tel" id="bookGuestPhone" class="form-control" placeholder="例如：0912-345-678" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-user-group"></i> 入住人數</label>
                             <select id="bookGuests" class="form-control">
                                 <option value="1">1 位貴賓</option>
                                 <option value="2" selected>2 位貴賓</option>
                                 <option value="3">3 位貴賓</option>
                                 <option value="4">4 位貴賓</option>
+                                <option value="6">6 位貴賓</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="modal-form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
                         <div class="form-group">
-                            <label>尊榮促銷優惠碼 (Promo Code)</label>
-                            <div style="display: flex; gap: 6px;">
+                            <label><i class="fa-solid fa-tag"></i> 尊榮促銷優惠碼 (Promo Code)</label>
+                            <div class="promo-input-wrapper" style="display: flex; gap: 6px;">
                                 <input type="text" id="bookPromoCode" class="form-control" placeholder="如: LUXURY2026 / VIP888">
                                 <button type="button" class="btn btn-outline btn-sm" onclick="app.applyPromoCode()">套用</button>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label><i class="fa-regular fa-comment-dots"></i> 入住特別備註需求 (選填)</label>
+                            <input type="text" id="bookSpecialRequests" class="form-control" placeholder="例如：高樓層、安靜房型、需額外備品">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>入住特別備註需求 (選填)</label>
-                        <input type="text" id="bookSpecialRequests" class="form-control" placeholder="例如：高樓層、安靜房型、需額外備品">
-                    </div>
-
-                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-top: 14px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #1e40af; margin-bottom: 4px;">
+                    <div class="booking-summary-card" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-top: 14px;">
+                        <div class="summary-row" style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #1e40af; margin-bottom: 4px;">
                             <span>預訂天數：<strong id="bookSummaryNights">1 晚</strong></span>
                             <span>優惠折扣：<strong id="bookSummaryDiscount">- NT$ 0</strong></span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #93c5fd; padding-top: 8px; margin-top: 6px;">
+                        <div class="summary-total-row" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #93c5fd; padding-top: 8px; margin-top: 6px;">
                             <span style="font-weight: 600; color: #1e3a8a;">應付總金額 (含稅與服務費)：</span>
-                            <span id="bookSummaryTotal" style="font-size: 1.35rem; font-weight: 800; color: #1e40af;">NT$ 0</span>
+                            <span id="bookSummaryTotal" class="summary-total-val" style="font-size: 1.35rem; font-weight: 800; color: #1e40af;">NT$ 0</span>
                         </div>
                     </div>
 
-                    <button type="submit" id="btnSubmitBooking" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 16px;">
+                    <button type="submit" id="btnSubmitBooking" class="btn btn-primary btn-block submit-booking-btn" style="padding: 12px; font-size: 1rem; margin-top: 16px;">
                         💳 確認下單並發送確認信件
                     </button>
                 </form>
@@ -1248,8 +1268,8 @@
         </div>
     </div>
 
-    <!-- Floating Shopping Cart Button (Mobile & Quick Access) -->
-    <div style="position: fixed; right: 24px; bottom: 24px; z-index: 999;">
+    <!-- Floating Shopping Cart Button (Shop Only Floating Access) -->
+    <div id="floatingShopCartContainer" style="position: fixed; right: 24px; bottom: 24px; z-index: 999; display: none;">
         <button type="button" class="btn btn-primary" onclick="app.openShopCartModal()" style="width: 58px; height: 58px; border-radius: 50%; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; position: relative;">
             <i class="fa-solid fa-cart-shopping"></i>
             <span id="spaCartBadgeCount" style="position: absolute; top: -4px; right: -4px; background: #dc2626; color: white; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #ffffff; transition: transform 0.2s;">0</span>

@@ -1,6 +1,7 @@
 package com.booking.modules.hotel.controller;
 
 import com.booking.common.ApiResponse;
+import com.booking.config.TaiwanHotelSeeder;
 import com.booking.modules.hotel.dto.RoomCreateUpdateDto;
 import com.booking.modules.hotel.dto.RoomDto;
 import com.booking.modules.hotel.service.HotelService;
@@ -19,9 +20,11 @@ import java.util.List;
 public class RoomController {
 
     private final HotelService hotelService;
+    private final TaiwanHotelSeeder taiwanHotelSeeder;
 
-    public RoomController(HotelService hotelService) {
+    public RoomController(HotelService hotelService, TaiwanHotelSeeder taiwanHotelSeeder) {
         this.hotelService = hotelService;
+        this.taiwanHotelSeeder = taiwanHotelSeeder;
     }
 
     @GetMapping({"/rooms", "/admin/rooms"})
@@ -58,5 +61,12 @@ public class RoomController {
     public ResponseEntity<ApiResponse<Void>> deleteRoom(@PathVariable Long id) {
         hotelService.deleteRoom(id);
         return ResponseEntity.ok(ApiResponse.success("房型已成功刪除", null));
+    }
+
+    @PostMapping("/rooms/reseed")
+    @Operation(summary = "重新載入全台 95 間精選飯店 100% 獨立不重複真實實景相片資料庫")
+    public ResponseEntity<ApiResponse<List<RoomDto>>> reseedRooms() {
+        taiwanHotelSeeder.seedHotelsIfEmpty();
+        return ResponseEntity.ok(ApiResponse.success("已成功重新載入全台灣 95 間飯店與真實不重複圖片！", hotelService.getAllRooms(null)));
     }
 }

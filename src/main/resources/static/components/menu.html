@@ -1,4 +1,15 @@
 <aside class="sidebar">
+    <!-- Mobile Drawer Header -->
+    <div class="sidebar-mobile-header">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #2563eb;">
+            <span style="font-size: 1.2rem;">🏨</span>
+            <span>Grand Luxury 選單</span>
+        </div>
+        <button type="button" class="sidebar-close-btn" onclick="if(window.app){app.toggleMobileMenu(false)}else{document.querySelector('.sidebar')?.classList.remove('open')}" aria-label="關閉選單">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
     <div>
         <!-- Section 1: 🛍️ 電商購物分類 (Shop Categories) -->
         <div id="sidebarSection1Title" class="sidebar-section-title">
@@ -6,27 +17,27 @@
         </div>
 
         <ul class="nav-menu" id="shopCategoriesNavMenu">
-            <li class="nav-item active" id="sidebarShopCat-all" onclick="if(window.app){app.filterShopCategory('ALL')}else if(window.filterCategory){filterCategory('ALL')}">
+            <li class="nav-item active" id="sidebarShopCat-all" onclick="if(window.app){app.filterShopCategory('ALL');app.toggleMobileMenu(false)}else if(window.filterCategory){filterCategory('ALL')}">
                 <span class="nav-icon">🛍️</span>
                 <span class="nav-text">全部商品</span>
             </li>
-            <li class="nav-item" id="sidebarShopCat-3c" onclick="if(window.app){app.filterShopCategory('📱 3C 數位旗艦')}else if(window.filterCategory){filterCategory('📱 3C 數位旗艦')}">
+            <li class="nav-item" id="sidebarShopCat-3c" onclick="if(window.app){app.filterShopCategory('📱 3C 數位旗艦');app.toggleMobileMenu(false)}else if(window.filterCategory){filterCategory('📱 3C 數位旗艦')}">
                 <span class="nav-icon">📱</span>
                 <span class="nav-text">3C 數位旗艦</span>
             </li>
-            <li class="nav-item" id="sidebarShopCat-fashion" onclick="if(window.app){app.filterShopCategory('👗 日韓流行服飾')}else if(window.filterCategory){filterCategory('👗 日韓流行服飾')}">
+            <li class="nav-item" id="sidebarShopCat-fashion" onclick="if(window.app){app.filterShopCategory('👗 日韓流行服飾');app.toggleMobileMenu(false)}else if(window.filterCategory){filterCategory('👗 日韓流行服飾')}">
                 <span class="nav-icon">👗</span>
                 <span class="nav-text">日韓流行服飾</span>
             </li>
-            <li class="nav-item" id="sidebarShopCat-beauty" onclick="if(window.app){app.filterShopCategory('💄 專櫃美妝保養')}else if(window.filterCategory){filterCategory('💄 專櫃美妝保養')}">
+            <li class="nav-item" id="sidebarShopCat-beauty" onclick="if(window.app){app.filterShopCategory('💄 專櫃美妝保養');app.toggleMobileMenu(false)}else if(window.filterCategory){filterCategory('💄 專櫃美妝保養')}">
                 <span class="nav-icon">💄</span>
                 <span class="nav-text">專櫃美妝保養</span>
             </li>
-            <li class="nav-item" id="sidebarShopCat-appliances" onclick="if(window.app){app.filterShopCategory('🏠 智能生活家電')}else if(window.filterCategory){filterCategory('🏠 智能生活家電')}">
+            <li class="nav-item" id="sidebarShopCat-appliances" onclick="if(window.app){app.filterShopCategory('🏠 智能生活家電');app.toggleMobileMenu(false)}else if(window.filterCategory){filterCategory('🏠 智能生活家電')}">
                 <span class="nav-icon">🏠</span>
                 <span class="nav-text">智能生活家電</span>
             </li>
-            <li class="nav-item" id="sidebarShopCat-gourmet" onclick="if(window.app){app.filterShopCategory('🍷 產地頂級美饌')}else if(window.filterCategory){filterCategory('🍷 產地頂級美饌')}">
+            <li class="nav-item" id="sidebarShopCat-gourmet" onclick="if(window.app){app.filterShopCategory('🍷 產地頂級美饌');app.toggleMobileMenu(false)}else if(window.filterCategory){filterCategory('🍷 產地頂級美饌')}">
                 <span class="nav-icon">🍷</span>
                 <span class="nav-text">產地頂級美饌</span>
             </li>

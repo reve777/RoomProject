@@ -1,5 +1,7 @@
 package com.booking.modules.auth.dto;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class AuthResponse {
@@ -33,6 +35,9 @@ public class AuthResponse {
     public String getAccessToken() { return accessToken; }
     public void setAccessToken(String accessToken) { this.accessToken = accessToken; }
 
+    // Compatibility getter for frontend `res.data.token`
+    public String getToken() { return accessToken; }
+
     public String getTokenType() { return tokenType; }
     public void setTokenType(String tokenType) { this.tokenType = tokenType; }
 
@@ -56,6 +61,17 @@ public class AuthResponse {
 
     public Set<String> getRoles() { return roles; }
     public void setRoles(Set<String> roles) { this.roles = roles; }
+
+    // Compatibility getter for frontend `res.data.user`
+    public Map<String, Object> getUser() {
+        Map<String, Object> u = new HashMap<>();
+        u.put("id", userId);
+        u.put("username", username);
+        u.put("email", email);
+        u.put("fullName", fullName != null && !fullName.isBlank() ? fullName : username);
+        u.put("roles", roles);
+        return u;
+    }
 
     public static AuthResponseBuilder builder() {
         return new AuthResponseBuilder();

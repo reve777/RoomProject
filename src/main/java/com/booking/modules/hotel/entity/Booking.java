@@ -40,6 +40,18 @@ public class Booking {
     @Column(nullable = false, length = 30)
     private BookingStatus status = BookingStatus.PENDING_PAYMENT;
 
+    @Column(name = "CONTACT_NAME", length = 100)
+    private String contactName;
+
+    @Column(name = "CONTACT_PHONE", length = 50)
+    private String contactPhone;
+
+    @Column(name = "CONTACT_EMAIL", length = 150)
+    private String contactEmail;
+
+    @Column(name = "GUESTS")
+    private Integer guests = 2;
+
     @Column(name = "SPECIAL_REQUESTS", length = 1000)
     private String specialRequests;
 
@@ -55,6 +67,7 @@ public class Booking {
 
     public Booking(Long id, String bookingNumber, User user, Room room, LocalDate checkInDate,
                    LocalDate checkOutDate, Double totalPrice, BookingStatus status,
+                   String contactName, String contactPhone, String contactEmail, Integer guests,
                    String specialRequests, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.bookingNumber = bookingNumber;
@@ -64,6 +77,10 @@ public class Booking {
         this.checkOutDate = checkOutDate;
         this.totalPrice = totalPrice;
         this.status = status != null ? status : BookingStatus.PENDING_PAYMENT;
+        this.contactName = contactName;
+        this.contactPhone = contactPhone;
+        this.contactEmail = contactEmail;
+        this.guests = guests != null ? guests : 2;
         this.specialRequests = specialRequests;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -133,6 +150,38 @@ public class Booking {
         this.status = status;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public Integer getGuests() {
+        return guests;
+    }
+
+    public void setGuests(Integer guests) {
+        this.guests = guests;
+    }
+
     public String getSpecialRequests() {
         return specialRequests;
     }
@@ -170,6 +219,10 @@ public class Booking {
         private LocalDate checkOutDate;
         private Double totalPrice;
         private BookingStatus status = BookingStatus.PENDING_PAYMENT;
+        private String contactName;
+        private String contactPhone;
+        private String contactEmail;
+        private Integer guests = 2;
         private String specialRequests;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -214,6 +267,26 @@ public class Booking {
             return this;
         }
 
+        public BookingBuilder contactName(String contactName) {
+            this.contactName = contactName;
+            return this;
+        }
+
+        public BookingBuilder contactPhone(String contactPhone) {
+            this.contactPhone = contactPhone;
+            return this;
+        }
+
+        public BookingBuilder contactEmail(String contactEmail) {
+            this.contactEmail = contactEmail;
+            return this;
+        }
+
+        public BookingBuilder guests(Integer guests) {
+            this.guests = guests;
+            return this;
+        }
+
         public BookingBuilder specialRequests(String specialRequests) {
             this.specialRequests = specialRequests;
             return this;
@@ -230,7 +303,8 @@ public class Booking {
         }
 
         public Booking build() {
-            return new Booking(id, bookingNumber, user, room, checkInDate, checkOutDate, totalPrice, status, specialRequests, createdAt, updatedAt);
+            return new Booking(id, bookingNumber, user, room, checkInDate, checkOutDate, totalPrice, status,
+                    contactName, contactPhone, contactEmail, guests, specialRequests, createdAt, updatedAt);
         }
     }
 }

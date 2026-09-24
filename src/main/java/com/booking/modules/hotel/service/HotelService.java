@@ -7,6 +7,7 @@ import com.booking.modules.hotel.dto.RoomImageDto;
 import com.booking.modules.hotel.entity.Room;
 import com.booking.modules.hotel.entity.RoomImage;
 import com.booking.modules.hotel.entity.RoomStatus;
+import com.booking.modules.hotel.repository.BookingRepository;
 import com.booking.modules.hotel.repository.RoomImageRepository;
 import com.booking.modules.hotel.repository.RoomRepository;
 import com.booking.modules.media.service.FileStorageService;
@@ -25,13 +26,16 @@ public class HotelService {
 
     private final RoomRepository roomRepository;
     private final RoomImageRepository roomImageRepository;
+    private final BookingRepository bookingRepository;
     private final FileStorageService fileStorageService;
 
     public HotelService(RoomRepository roomRepository,
                         RoomImageRepository roomImageRepository,
+                        BookingRepository bookingRepository,
                         FileStorageService fileStorageService) {
         this.roomRepository = roomRepository;
         this.roomImageRepository = roomImageRepository;
+        this.bookingRepository = bookingRepository;
         this.fileStorageService = fileStorageService;
     }
 
@@ -120,6 +124,13 @@ public class HotelService {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("找不到房型 ID: " + id));
 
+        // Safely clean up any associated bookings first to prevent foreign key integrity exceptions
+        try {
+            bookingRepository.deleteByRoomId(id);
+        } catch (Exception e) {
+            log.warn("刪除房型相關訂單時發生警告 (ID: {}): {}", id, e.getMessage());
+        }
+
         // Clean up images
         for (RoomImage image : room.getImages()) {
             fileStorageService.deleteFile(image.getImageUrl());
@@ -143,7 +154,7 @@ public class HotelService {
                 .filter(RoomImage::isPrimary)
                 .map(RoomImage::getImageUrl)
                 .findFirst()
-                .orElse(room.getImages().isEmpty() ? null : room.getImages().get(0).getImageUrl());
+                .orElse(imageDtos.isEmpty() ? null : imageDtos.get(0).getImageUrl());
 
         return RoomDto.builder()
                 .id(room.getId())

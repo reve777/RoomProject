@@ -3,9 +3,11 @@ package com.booking.modules.hotel.repository;
 import com.booking.modules.hotel.entity.Booking;
 import com.booking.modules.hotel.entity.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -25,4 +27,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                        @Param("checkInDate") LocalDate checkInDate,
                                        @Param("checkOutDate") LocalDate checkOutDate,
                                        @Param("statuses") Collection<BookingStatus> statuses);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Booking b WHERE b.room.id = :roomId")
+    void deleteByRoomId(@Param("roomId") Long roomId);
 }

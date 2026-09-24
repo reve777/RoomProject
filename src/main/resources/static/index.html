@@ -487,9 +487,6 @@
                                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
                                         <input type="radio" name="regRole" value="ROLE_USER" checked onchange="app.toggleAdminKeyField()"> 👤 一般貴賓會員
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="radio" name="regRole" value="ROLE_ADMIN" onchange="app.toggleAdminKeyField()"> 🛡️ 系統管理者 (需暗號)
-                                    </label>
                                 </div>
                             </div>
 
@@ -513,9 +510,14 @@
                         <h2>🛡️ 全館房型管理 (Admin Room Management)</h2>
                         <p style="color: #64748b; font-size: 0.95rem; margin-top: 4px;">管理者可在此新增、編輯、設定上架狀態與房型照片清單</p>
                     </div>
-                    <button class="btn btn-primary" onclick="app.openRoomEditModal(null)">
-                        <i class="fa-solid fa-plus"></i> 新增全新房型
-                    </button>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-outline" onclick="app.reseedAdminRooms()">
+                            <i class="fa-solid fa-arrows-rotate"></i> 重載 95 間不重複房型
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="app.openRoomEditModal(null)">
+                            <i class="fa-solid fa-plus"></i> 新增全新房型
+                        </button>
+                    </div>
                 </div>
 
                 <div class="table-card">
@@ -681,12 +683,59 @@
 
     <!-- 1. 登入 Modal -->
     <div id="loginModal" class="modal">
-        <div class="modal-content" style="max-width: 440px;">
+        <div class="modal-content" style="max-width: 460px;">
             <div class="modal-header">
                 <h3>🔑 尊榮會員登入</h3>
                 <button class="modal-close" onclick="app.closeModal('loginModal')">&times;</button>
             </div>
             <div class="modal-body">
+                <!-- 1. 快速測試一鍵帶入 (置於最上方，方便立即使用) -->
+                <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #1e40af; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                        <span>⚡ 快速測試一鍵填入帳號：</span>
+                        <span style="font-size: 0.75rem; color: #3b82f6;">點擊自動帶入</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="app.quickFillLogin('user', 'user123')" style="background: white; border-color: #93c5fd; color: #1e40af; font-weight: 600; padding: 7px 6px;">
+                            👤 一般會員 (user)
+                        </button>
+                    </div>
+                    <div style="margin-top: 8px; text-align: center;">
+                        <a href="javascript:void(0)" onclick="app.handleGuestLogin()" style="font-size: 0.8rem; color: #2563eb; text-decoration: underline; font-weight: 600;">
+                            🚀 免帳號直接以訪客身分體驗
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 2. 第三方快速授權登入 (Google & LINE 官方彩色圖標) -->
+                <div style="margin-bottom: 16px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <button type="button" class="btn btn-outline" onclick="app.handleGoogleOAuthLogin()" style="background: #ffffff; border: 1px solid #dadce0; color: #3c4043; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-radius: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                            </svg>
+                            Google 登入
+                        </button>
+                        <button type="button" class="btn" onclick="app.showLineQrCodeModal()" style="background: #06C755; border: none; color: #ffffff; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(6,199,85,0.2); border-radius: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                <path d="M24 10.3c0-4.8-5.4-8.8-12-8.8S0 5.5 0 10.3c0 4.3 3.8 7.9 9 8.6.3.1.8.2.9.6.1.3.1.8 0 1.2l-.3 1.7c-.1.5-.4 1.8 1.6 1 2-1.3 5.4-3.2 7.4-5.4 3.4-2 5.4-4.5 5.4-7.1z"/>
+                            </svg>
+                            LINE 掃碼
+                        </button>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="javascript:void(0)" onclick="app.showGoogleMailOtpModal()" style="font-size: 0.85rem; color: #2563eb; text-decoration: none; font-weight: 500;">
+                            📧 使用 Google Mail 免密碼 6 位數 OTP 登入
+                        </a>
+                    </div>
+                </div>
+
+                <div class="oauth-divider">或使用帳號密碼登入</div>
+
+                <!-- 3. 一般帳號密碼登入表單 -->
                 <form onsubmit="app.handleLogin(event)">
                     <div class="form-group">
                         <label>帳號或 Email</label>
@@ -696,36 +745,14 @@
                         <label>密碼</label>
                         <input type="password" id="loginPassword" class="form-control" required placeholder="請輸入密碼">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" style="padding: 10px; font-size: 1rem;">登入</button>
+                    <button type="submit" class="btn btn-primary btn-block" style="padding: 10px; font-size: 1rem; border-radius: 8px;">
+                        🔑 立即登入
+                    </button>
                 </form>
-
-                <div class="oauth-divider">快速登入選項</div>
-
-                <div class="oauth-button-grid">
-                    <button type="button" class="btn-oauth btn-oauth-google" onclick="app.handleGoogleOAuthLogin()">
-                        <i class="fa-brands fa-google"></i> Google 登入
-                    </button>
-                    <button type="button" class="btn-oauth btn-oauth-line" onclick="app.showLineQrCodeModal()">
-                        <i class="fa-brands fa-line"></i> LINE 掃碼
-                    </button>
-                </div>
-
-                <div style="margin-top: 12px; text-align: center;">
-                    <a href="javascript:void(0)" onclick="app.showGoogleMailOtpModal()" style="font-size: 0.85rem; color: #2563eb; text-decoration: none;">
-                        📧 使用 Google Mail 免密碼 6 位數 OTP 登入
-                    </a>
-                </div>
-
-                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed #e2e8f0; font-size: 0.8rem; color: #64748b; text-align: center;">
-                    快速測試帳號：<br>
-                    <a href="javascript:void(0)" onclick="app.quickFillLogin('admin', 'admin123')" style="color:#2563eb; font-weight: bold;">[管理員: admin / admin123]</a> |
-                    <a href="javascript:void(0)" onclick="app.quickFillLogin('user', 'user123')" style="color:#2563eb; font-weight: bold;">[會員: user / user123]</a>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. Google Mail OTP 登入 Modal -->
     <div id="googleMailOtpModal" class="modal">
         <div class="modal-content" style="max-width: 440px;">
             <div class="modal-header">
@@ -756,23 +783,37 @@
     <div id="lineQrModal" class="modal">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <div class="modal-header">
-                <h3>🟢 LINE 掃碼授權登入</h3>
+                <h3 style="display: flex; align-items: center; gap: 8px; justify-content: center; width: 100%;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#06C755">
+                        <path d="M24 10.3c0-4.8-5.4-8.8-12-8.8S0 5.5 0 10.3c0 4.3 3.8 7.9 9 8.6.3.1.8.2.9.6.1.3.1.8 0 1.2l-.3 1.7c-.1.5-.4 1.8 1.6 1 2-1.3 5.4-3.2 7.4-5.4 3.4-2 5.4-4.5 5.4-7.1z"/>
+                    </svg>
+                    LINE 掃碼授權登入
+                </h3>
                 <button class="modal-close" onclick="app.closeModal('lineQrModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 12px;">請使用 LINE 行動 App 掃描下方 QR Code 完成身分授權</p>
-                <img id="lineQrImg" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" style="width: 180px; height: 180px; margin: 0 auto 12px auto; display: block; border: 1px solid #e2e8f0; padding: 6px; border-radius: 8px;" alt="LINE QR Code">
+                <div style="background: #f8fafc; padding: 12px; border-radius: 12px; display: inline-block; border: 1px solid #e2e8f0; margin-bottom: 12px;">
+                    <img id="lineQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://access.line.me/oauth2/v2.1/authorize" style="width: 180px; height: 180px; display: block; border-radius: 6px;" alt="LINE QR Code">
+                </div>
                 <p id="lineQrStatusText" style="font-size: 0.9rem; font-weight: 600; color: #059669; margin-bottom: 16px;">🟢 等待手機端掃描授權中...</p>
                 <button type="button" class="btn btn-outline btn-block" onclick="app.openLineAuthUrl()">🔗 於瀏覽器開啟授權網址</button>
             </div>
         </div>
     </div>
 
-    <!-- 4. Google OAuth Link Modal -->
     <div id="googleAuthUrlModal" class="modal">
         <div class="modal-content" style="max-width: 480px;">
             <div class="modal-header">
-                <h3>🌐 Google OAuth2.0 授權</h3>
+                <h3 style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                    </svg>
+                    Google OAuth 2.0 授權登入
+                </h3>
                 <button class="modal-close" onclick="app.closeModal('googleAuthUrlModal')">&times;</button>
             </div>
             <div class="modal-body">
@@ -783,7 +824,6 @@
         </div>
     </div>
 
-    <!-- 5. 2FA 登入校驗 Modal -->
     <div id="twoFactorVerifyModal" class="modal">
         <div class="modal-content" style="max-width: 420px;">
             <div class="modal-header">
@@ -1159,7 +1199,7 @@
     <div id="spaCartModal" class="modal">
         <div class="modal-content" style="max-width: 520px;">
             <div class="modal-header">
-                <h3>🛒 我的購物車明細</h3>
+                <h3 id="spaCartModalTitle">🛒 我的購物車明細</h3>
                 <button class="modal-close" onclick="app.closeShopCartModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -1277,6 +1317,6 @@
     </div>
 
     <!-- Frontend Core Application Script -->
-    <script src="/js/app.js?v=20260922_v5"></script>
+    <script src="/js/app.js?v=20260923_v4"></script>
 </body>
 </html>

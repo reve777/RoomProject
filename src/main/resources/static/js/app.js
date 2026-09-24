@@ -93,7 +93,7 @@ const app = {
     async init() {
         await this.loadComponents();
         this.updateAuthUI();
-        this.updateShopCartUI();
+        this.loadShopCartForCurrentUser();
         this.checkOAuthCallback();
         this.checkUrlAuthParams();
         await this.loadRooms();
@@ -123,6 +123,14 @@ const app = {
         const p = document.getElementById('loginPassword');
         if (u) u.value = username;
         if (p) p.value = password;
+        if (u && p) {
+            u.style.borderColor = '#2563eb';
+            p.style.borderColor = '#2563eb';
+            setTimeout(() => {
+                u.style.borderColor = '';
+                p.style.borderColor = '';
+            }, 600);
+        }
     },
 
     async loadComponents() {
@@ -726,6 +734,7 @@ switchView(viewId) {
         if (token) localStorage.setItem('token', token);
         if (user) localStorage.setItem('user', JSON.stringify(user));
         this.updateAuthUI();
+        this.loadShopCartForCurrentUser();
     },
 
 logout() {
@@ -734,6 +743,7 @@ logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         this.updateAuthUI();
+        this.loadShopCartForCurrentUser();
         this.switchView('roomsView');
         alert('您已安全登出。');
     },
@@ -1232,7 +1242,7 @@ logout() {
             });
         }
 
-        localStorage.setItem('shopCart', JSON.stringify(this.state.shopCart));
+        this.saveShopCartForCurrentUser();
         this.updateShopCartUI();
 
         // 觸發全套浮誇特效與情緒價值反饋
@@ -1442,7 +1452,30 @@ logout() {
         }, 3600);
     },
 
-updateShopCartUI() {
+
+    // --- Isolated User / Admin Shopping Cart Management ---
+    getShopCartKey() {
+        if (this.state.user && this.state.user.username) {
+            const isAdmin = this.state.user.roles && this.state.user.roles.includes('ROLE_ADMIN');
+            return `shopCart_${isAdmin ? 'admin' : 'user'}_${this.state.user.username}`;
+        }
+        return 'shopCart_guest';
+    },
+
+    loadShopCartForCurrentUser() {
+        const key = this.getShopCartKey();
+        this.state.shopCart = safeJsonParse(safeGetStorage(key), []);
+        this.updateShopCartUI();
+        if (document.getElementById('spaCartModal')?.classList.contains('show')) {
+            this.renderShopCartModal();
+        }
+    },
+
+    saveShopCartForCurrentUser() {
+        const key = this.getShopCartKey();
+        localStorage.setItem(key, JSON.stringify(this.state.shopCart));
+    },
+    updateShopCartUI() {
         const badge = document.getElementById('spaCartBadgeCount');
         const totalQty = this.state.shopCart.reduce((sum, item) => sum + (item.qty || 1), 0);
         if (badge) badge.innerText = totalQty;
@@ -1460,6 +1493,18 @@ updateShopCartUI() {
     renderShopCartModal() {
         const container = document.getElementById('spaCartItemsList');
         if (!container) return;
+
+        const titleEl = document.getElementById('spaCartModalTitle');
+        if (titleEl) {
+            const isAdm = this.state.user && this.state.user.roles && this.state.user.roles.includes('ROLE_ADMIN');
+            if (isAdm) {
+                titleEl.innerHTML = `🛒 管理者專屬購物車 <span style="font-size:0.8rem; background:#fee2e2; color:#dc2626; padding:2px 8px; border-radius:9999px; margin-left:6px;">👑 管理員 ${this.state.user.username}</span>`;
+            } else if (this.state.user) {
+                titleEl.innerHTML = `🛒 我的購物車明細 <span style="font-size:0.8rem; background:#dbeafe; color:#2563eb; padding:2px 8px; border-radius:9999px; margin-left:6px;">👤 貴賓 ${this.state.user.fullName || this.state.user.username}</span>`;
+            } else {
+                titleEl.innerHTML = `🛒 訪客購物車 <span style="font-size:0.8rem; background:#f1f5f9; color:#64748b; padding:2px 8px; border-radius:9999px; margin-left:6px;">訪客模式</span>`;
+            }
+        }
 
         if (this.state.shopCart.length === 0) {
             container.innerHTML = '<div style="text-align: center; padding: 36px 0; color: #94a3b8;">🛒 購物車目前空空如也，快去挑選熱銷商品吧！</div>';
@@ -1506,7 +1551,7 @@ updateShopCartUI() {
             this.state.shopCart = this.state.shopCart.filter(i => String(i.id) !== String(productId));
         }
 
-        localStorage.setItem('shopCart', JSON.stringify(this.state.shopCart));
+        this.saveShopCartForCurrentUser();
         this.updateShopCartUI();
         this.renderShopCartModal();
     },
@@ -1514,7 +1559,7 @@ updateShopCartUI() {
     clearShopCart() {
         if (!confirm('確定要清空購物車內的所有商品嗎？')) return;
         this.state.shopCart = [];
-        localStorage.removeItem('shopCart');
+        localStorage.removeItem(this.getShopCartKey());
         this.updateShopCartUI();
         this.renderShopCartModal();
     },
@@ -1631,7 +1676,7 @@ updateShopCartUI() {
 
             const order = res.data;
             this.state.shopCart = [];
-            localStorage.removeItem('shopCart');
+            localStorage.removeItem(this.getShopCartKey());
             this.updateShopCartUI();
             this.closeShopCheckoutModal();
 
@@ -2375,14 +2420,28 @@ closeShopSuccessModal() {
     },
 
     async deleteAdminRoom(roomId) {
-        if (!confirm('確定要刪除此筆房型資料嗎？此操作無法復原。')) return;
+        const room = this.state.rooms.find(r => r.id === roomId);
+        const roomName = room ? `${room.city} · ${room.name}` : `ID: ${roomId}`;
+        if (!confirm(`⚠️ 確定要刪除此筆房型資料嗎？\n\n【${roomName}】\n\n※ 此操作將同時安全清理相關關聯紀錄且無法復原。`)) return;
         try {
             await this.fetchApi(`/admin/rooms/${roomId}`, { method: 'DELETE' });
-            alert('房型已成功刪除。');
+            alert(`✅ 房型【${roomName}】已成功刪除！`);
             await this.loadRooms();
             this.loadAdminRooms();
         } catch (err) {
-            alert('刪除失敗: ' + err.message);
+            alert('❌ 刪除房型失敗: ' + err.message);
+        }
+    },
+
+    async reseedAdminRooms() {
+        if (!confirm('🔄 確定要重新載入全台 95 間飯店真實實景相片資料庫嗎？\n這將自動確保每一間飯店都擁有獨立不重複的實景相片！')) return;
+        try {
+            const res = await this.fetchApi('/rooms/reseed', { method: 'POST' });
+            alert('🎉 ' + (res.message || '已成功重新載入全台灣 95 間精選星級飯店與不重複照片！'));
+            await this.loadRooms();
+            this.loadAdminRooms();
+        } catch (err) {
+            alert('❌ 重新載入失敗: ' + err.message);
         }
     },
 

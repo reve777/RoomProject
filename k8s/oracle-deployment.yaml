@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: oracle-free
-          image: gvenzl/oracle-free:latest
+          image: gvenzl/oracle-free:slim-faststart
           ports:
             - containerPort: 1521
           env:
@@ -24,17 +24,17 @@ spec:
               value: "1234"
             - name: APP_USER
               value: "ivan"
-            - name: APP_PASSWORD
+            - name: APP_USER_PASSWORD
               value: "1234"
             - name: ORACLE_DATABASE
               value: "FREEPDB1"
           resources:
             requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
               memory: "2Gi"
               cpu: "1000m"
-            limits:
-              memory: "4Gi"
-              cpu: "2000m"
 ---
 apiVersion: v1
 kind: Service

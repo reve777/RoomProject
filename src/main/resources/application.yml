@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8090}
   servlet:
     context-path: /
 
@@ -7,12 +7,12 @@ spring:
   application:
     name: hotel-booking-service
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:prod}
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@localhost:1521/FREEPDB1}
-    username: ${SPRING_DATASOURCE_USERNAME:ivan}
-    password: ${SPRING_DATASOURCE_PASSWORD:1234}
+    url: ${DB_URL:${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@//host.docker.internal:1521/xepdb1}}
+    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:ivan}}
+    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:1234}}
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       maximum-pool-size: 10
@@ -59,11 +59,11 @@ app:
     google:
       client-id: ${GOOGLE_CLIENT_ID:mock-google-client-id.apps.googleusercontent.com}
       client-secret: ${GOOGLE_CLIENT_SECRET:mock-google-client-secret}
-      redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8080/index.html?oauth=google}
+      redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8090/index.html?oauth=google}
     line:
       channel-id: ${LINE_CHANNEL_ID:mock-line-channel-id}
       channel-secret: ${LINE_CHANNEL_SECRET:mock-line-channel-secret}
-      redirect-uri: ${LINE_REDIRECT_URI:http://localhost:8080/index.html?oauth=line}
+      redirect-uri: ${LINE_REDIRECT_URI:http://localhost:8090/index.html?oauth=line}
 
 springdoc:
   api-docs:
@@ -78,6 +78,3 @@ management:
     web:
       exposure:
         include: health,info,metrics
-  health:
-    mail:
-      enabled: false

@@ -53,13 +53,13 @@ public class AuthService {
     @Value("${app.oauth.google.client-id:mock-google-client-id.apps.googleusercontent.com}")
     private String googleClientId;
 
-    @Value("${app.oauth.google.redirect-uri:http://localhost:8080/index.html?oauth=google}")
+    @Value("${app.oauth.google.redirect-uri:http://localhost:8090/index.html?oauth=google}")
     private String googleRedirectUri;
 
     @Value("${app.oauth.line.channel-id:mock-line-channel-id}")
     private String lineChannelId;
 
-    @Value("${app.oauth.line.redirect-uri:http://localhost:8080/index.html?oauth=line}")
+    @Value("${app.oauth.line.redirect-uri:http://localhost:8090/index.html?oauth=line}")
     private String lineRedirectUri;
 
     public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository,
@@ -374,7 +374,7 @@ public class AuthService {
         lineQrSessionMap.put(qrSessionId, new QrSessionEntry("PENDING", System.currentTimeMillis() + 300_000, null));
 
         // Point the QR Code to the mobile authorization page
-        String host = (originHost != null && !originHost.isBlank()) ? originHost : "http://localhost:8080";
+        String host = (originHost != null && !originHost.isBlank()) ? originHost : "http://localhost:8090";
         if (host.endsWith("/")) {
             host = host.substring(0, host.length() - 1);
         }

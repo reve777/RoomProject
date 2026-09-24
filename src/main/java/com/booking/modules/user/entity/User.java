@@ -74,7 +74,7 @@ public class User {
         this.twoFactorSecret = twoFactorSecret;
         this.oauthProvider = oauthProvider;
         this.oauthId = oauthId;
-        this.roles = roles != null ? roles : new HashSet<>();
+        this.roles = roles != null ? new HashSet<>(roles) : new HashSet<>();
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -110,7 +110,17 @@ public class User {
     public void setOauthId(String oauthId) { this.oauthId = oauthId; }
 
     public Set<Role> getRoles() { return roles; }
-    public void setRoles(Set<Role> roles) { this.roles = roles; }
+    public void setRoles(Set<Role> roles) {
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
+        if (roles != null && this.roles != roles) {
+            this.roles.clear();
+            this.roles.addAll(roles);
+        } else if (roles == null) {
+            this.roles.clear();
+        }
+    }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
@@ -147,7 +157,10 @@ public class User {
         public UserBuilder twoFactorSecret(String twoFactorSecret) { this.twoFactorSecret = twoFactorSecret; return this; }
         public UserBuilder oauthProvider(String oauthProvider) { this.oauthProvider = oauthProvider; return this; }
         public UserBuilder oauthId(String oauthId) { this.oauthId = oauthId; return this; }
-        public UserBuilder roles(Set<Role> roles) { this.roles = roles; return this; }
+        public UserBuilder roles(Set<Role> roles) { 
+            this.roles = roles != null ? new HashSet<>(roles) : new HashSet<>(); 
+            return this; 
+        }
         public UserBuilder createdAt(LocalDateTime createdAt) { this.createdAt = createdAt; return this; }
         public UserBuilder updatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; return this; }
 

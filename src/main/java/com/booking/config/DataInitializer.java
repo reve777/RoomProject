@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -47,9 +47,15 @@ public class DataInitializer implements CommandLineRunner {
         // 建立/更新預設管理員帳號 (admin / admin123)
         userRepository.findByUsername("admin").ifPresentOrElse(admin -> {
             admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRoles(Set.of(adminRole, userRole));
+            Set<Role> roles = new HashSet<>();
+            roles.add(adminRole);
+            roles.add(userRole);
+            admin.setRoles(roles);
             userRepository.save(admin);
         }, () -> {
+            Set<Role> roles = new HashSet<>();
+            roles.add(adminRole);
+            roles.add(userRole);
             User admin = User.builder()
                     .username("admin")
                     .email("admin@hotelbooking.com")
@@ -57,7 +63,7 @@ public class DataInitializer implements CommandLineRunner {
                     .fullName("系統最高管理者")
                     .phone("0900-000-000")
                     .twoFactorEnabled(false)
-                    .roles(Set.of(adminRole, userRole))
+                    .roles(roles)
                     .build();
             userRepository.save(admin);
             log.info("預設管理員帳號建立完成: admin / admin123");
@@ -66,9 +72,13 @@ public class DataInitializer implements CommandLineRunner {
         // 建立/更新一般測試使用者 (user / user123)
         userRepository.findByUsername("user").ifPresentOrElse(user -> {
             user.setPassword(passwordEncoder.encode("user123"));
-            user.setRoles(Collections.singleton(userRole));
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
+            user.setRoles(roles);
             userRepository.save(user);
         }, () -> {
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
             User user = User.builder()
                     .username("user")
                     .email("user@example.com")
@@ -76,7 +86,7 @@ public class DataInitializer implements CommandLineRunner {
                     .fullName("尊榮VIP會員")
                     .phone("0912-345-678")
                     .twoFactorEnabled(false)
-                    .roles(Collections.singleton(userRole))
+                    .roles(roles)
                     .build();
             userRepository.save(user);
             log.info("預設測試會員帳號建立完成: user / user123");
@@ -85,9 +95,13 @@ public class DataInitializer implements CommandLineRunner {
         // 建立/更新訪客體驗專用帳號 (guest / guest123)
         userRepository.findByUsername("guest").ifPresentOrElse(guest -> {
             guest.setPassword(passwordEncoder.encode("guest123"));
-            guest.setRoles(Collections.singleton(userRole));
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
+            guest.setRoles(roles);
             userRepository.save(guest);
         }, () -> {
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
             User guestUser = User.builder()
                     .username("guest")
                     .email("guest@hotelbooking.com")
@@ -95,13 +109,13 @@ public class DataInitializer implements CommandLineRunner {
                     .fullName("訪客體驗貴賓")
                     .phone("0988-888-888")
                     .twoFactorEnabled(false)
-                    .roles(Collections.singleton(userRole))
+                    .roles(roles)
                     .build();
             userRepository.save(guestUser);
             log.info("預設訪客體驗帳號建立完成: guest / guest123");
         });
 
-        // 初始化全台灣各縣市 95 家精選星級飯店與特色房型資料
+        // 初始化全台灣 19 個縣市精選星級飯店與特色房型資料
         taiwanHotelSeeder.seedHotelsIfEmpty();
     }
 }

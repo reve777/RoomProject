@@ -222,6 +222,8 @@ public class AuthService {
 
         User guest = userRepository.findByUsername("guest")
                 .orElseGet(() -> {
+                    Set<Role> roles = new HashSet<>();
+                    roles.add(userRole);
                     User newGuest = User.builder()
                             .username("guest")
                             .email("guest@hotelbooking.com")
@@ -229,7 +231,7 @@ public class AuthService {
                             .password(passwordEncoder.encode(UUID.randomUUID().toString()))
                             .phone("0988-888-888")
                             .twoFactorEnabled(false)
-                            .roles(Collections.singleton(userRole))
+                            .roles(roles)
                             .build();
                     return userRepository.save(newGuest);
                 });
@@ -316,13 +318,15 @@ public class AuthService {
                     .orElseGet(() -> roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build()));
 
             String username = cleanEmail.split("@")[0].replaceAll("[^a-zA-Z0-9_]", "") + "_" + (System.currentTimeMillis() % 10000);
+            Set<Role> roles = new HashSet<>();
+            roles.add(userRole);
             User newUser = User.builder()
                     .username(username)
                     .email(cleanEmail)
                     .fullName("Gmail 貴賓會員")
                     .password(passwordEncoder.encode(UUID.randomUUID().toString()))
                     .twoFactorEnabled(false)
-                    .roles(Collections.singleton(userRole))
+                    .roles(roles)
                     .build();
             return userRepository.save(newUser);
         });

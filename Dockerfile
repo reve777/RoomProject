@@ -1,26 +1,15 @@
-# Multi-stage Dockerfile for Spring Boot Application (Java 21)
-# Stage 1: Build
-FROM eclipse-temurin:21-jdk-alpine AS builder
-WORKDIR /workspace
-
-# Copy Maven wrapper & POM
-COPY mvnw mvnw.cmd pom.xml ./
-COPY .mvn .mvn
-COPY src ./src
-
-# Make mvnw executable and package application
-RUN chmod +x ./mvnw && \
-    ./mvnw clean package -DskipTests
-
-# Stage 2: Runtime
+# Optimized Single-stage Dockerfile using locally compiled jar (Java 21)
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Add a non-root system user for security best practices
-RUN addgroup -S spring && adduser -S spring -G spring
+# Add non-root system user and prepare upload folder with proper permissions
+RUN addgroup -S spring && adduser -S spring -G spring && \
+    mkdir -p /app/uploads/room-images && \
+    chown -R spring:spring /app
+
 USER spring:spring
 
-COPY --from=builder /workspace/target/*.jar app.jar
+COPY --chown=spring:spring target/hotel-booking-service-1.0.0-SNAPSHOT.jar app.jar
 
 EXPOSE 8090
 

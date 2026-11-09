@@ -1,0 +1,142 @@
+# Kubernetes Configuration for AWS Cloud + Cloudflare + AWS RDS for Oracle
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hotel-cloud-config
+  labels:
+    app: hotel-booking
+    env: production
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  # Replace with your AWS RDS Oracle Endpoint (port 1521 / service name or SID)
+  DB_URL: "jdbc:oracle:thin:@//your-rds-endpoint.xxxxxx.ap-northeast-1.rds.amazonaws.com:1521/ORCL"
+  SPRING_DATASOURCE_URL: "jdbc:oracle:thin:@//your-rds-endpoint.xxxxxx.ap-northeast-1.rds.amazonaws.com:1521/ORCL"
+  SERVER_PORT: "8090"
+  MAIL_HOST: "smtp.gmail.com"
+  MAIL_PORT: "587"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hotel-cloud-secret
+  labels:
+    app: hotel-booking
+    env: production
+type: Opaque
+stringData:
+  DB_USERNAME: "admin"
+  DB_PASSWORD: "YourRdsPassword123"
+  SPRING_DATASOURCE_USERNAME: "admin"
+  SPRING_DATASOURCE_PASSWORD: "YourRdsPassword123"
+  JWT_SECRET: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+  MAIL_USERNAME: "zerokinger@gmail.com"
+  MAIL_PASSWORD: "vqgyznauddovegbs"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel-cloud-deployment
+  labels:
+    app: hotel-booking
+    env: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hotel-booking
+  template:
+    metadata:
+      labels:
+        app: hotel-booking
+    spec:
+      containers:
+        - name: hotel-booking-app
+          image: hotel-booking-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8090
+              name: http
+          envFrom:
+            - configMapRef:
+                name: hotel-cloud-config
+            - secretRef:
+                name: hotel-cloud-secret
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "300m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8090
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotel-cloud-service
+  labels:
+    app: hotel-booking
+    env: production
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8090
+      targetPort: 8090
+      name: http
+  selector:
+    app: hotel-booking
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hotel-cloud-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hotel-cloud-service
+                port:
+                  number: 8090
+    - host: www.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hotel-cloud-service
+                port:
+                  number: 8090

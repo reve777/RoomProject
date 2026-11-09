@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # 1. Spring Boot Application (Connects to AWS RDS for Oracle)
+  hotel-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hotel-booking-app:latest
+    container_name: hotel-booking-app
+    restart: always
+    environment:
+      # AWS RDS Oracle Database Connection
+      # Example: jdbc:oracle:thin:@//your-rds-endpoint.xxxxxx.ap-northeast-1.rds.amazonaws.com:1521/ORCL
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_URL=${AWS_RDS_ORACLE_URL:-jdbc:oracle:thin:@//your-rds-endpoint.rds.amazonaws.com:1521/ORCL}
+      - SPRING_DATASOURCE_URL=${AWS_RDS_ORACLE_URL:-jdbc:oracle:thin:@//your-rds-endpoint.rds.amazonaws.com:1521/ORCL}
+      - SPRING_DATASOURCE_USERNAME=${AWS_RDS_USERNAME:-admin}
+      - SPRING_DATASOURCE_PASSWORD=${AWS_RDS_PASSWORD:-YourRdsPassword123}
+      - SERVER_PORT=8090
+      - JWT_SECRET=${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USERNAME=${MAIL_USERNAME:-zerokinger@gmail.com}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-vqgyznauddovegbs}
+    expose:
+      - "8090"
+    networks:
+      - app-net
+
+  # 2. Nginx Reverse Proxy (Frontend entry on EC2 receiving traffic from Cloudflare)
+  nginx:
+    image: nginx:alpine
+    container_name: hotel-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - hotel-app
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge

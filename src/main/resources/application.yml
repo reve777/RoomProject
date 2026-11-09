@@ -10,10 +10,16 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:prod}
 
   datasource:
-    url: ${DB_URL:${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@//host.docker.internal:1521/xepdb1}}
-    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:ivan}}
+#    url: ${DB_URL:${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@//host.docker.internal:1521/xepdb1}}
+#    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:ivan}}
+#    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:1234}}
+#    driver-class-name: oracle.jdbc.OracleDriver
+    # 預設連線改為 PostgreSQL 格式，Port 預設 5432
+    url: ${DB_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}}
+    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:Ivan_1}}
     password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:1234}}
-    driver-class-name: oracle.jdbc.OracleDriver
+    # 驅動類別改為 PostgreSQL Driver
+    driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
@@ -21,7 +27,9 @@ spring:
       pool-name: HotelBookingHikariCP
 
   jpa:
-    database-platform: org.hibernate.dialect.OracleDialect
+#    database-platform: org.hibernate.dialect.OracleDialect
+    # 方言改為 PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: false
